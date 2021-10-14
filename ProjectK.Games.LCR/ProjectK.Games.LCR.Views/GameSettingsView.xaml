@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="ProjectK.Games.LCR.Views.GameSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style TargetType="TextBox" x:Key="NumberTextBoxStyle">
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--Preset-->
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <!--Number Of Players-->
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="15"/>
+            <!--Number Of Games-->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="15"/>
+            <!--Buttons-->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+        </Grid.ColumnDefinitions>
+        <!--Preset-->
+        <TextBlock Grid.Row="1" Grid.Column="1">Preset</TextBlock>
+        <ComboBox Grid.Row="3" Grid.Column="1">Preset</ComboBox>
+        <!--Number Of Players-->
+        <TextBlock Grid.Row="5" Grid.Column="1">Number Of Players</TextBlock>
+        <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource NumberTextBoxStyle}">3</TextBox>
+        <!--Number Of Games-->
+        <TextBlock Grid.Row="9" Grid.Column="1">Number Of Games</TextBlock>
+        <TextBox Grid.Row="11" Grid.Column="1" Style="{StaticResource NumberTextBoxStyle}" >3</TextBox>
+        <!--Buttons-->
+        <Grid Grid.Row="13" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="1" Grid.Column="1">Play</Button>
+            <Button Grid.Row="1" Grid.Column="3">Cancel</Button>
+        </Grid>
+    </Grid>
+
+</UserControl>

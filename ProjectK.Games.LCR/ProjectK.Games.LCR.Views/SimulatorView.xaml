@@ -7,6 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="519*"/>
+        </Grid.ColumnDefinitions>
+        <local:GameSettingsView Grid.Column="0" Grid.Row="0"></local:GameSettingsView>
     </Grid>
 </UserControl>
