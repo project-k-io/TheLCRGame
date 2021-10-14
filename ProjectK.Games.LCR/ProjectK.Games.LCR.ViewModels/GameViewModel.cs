@@ -9,5 +9,7 @@ namespace ProjectK.Games.LCR.ViewModels
 {
     public class GameViewModel : ViewModelBase
     {
+        public int NumberOfPlayers { get; set; }
+        public int NumberOfGames{ get; set; }
     }
 }
