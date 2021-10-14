@@ -6,4 +6,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectK.Games.LCR.ViewModels\ProjectK.Games.LCR.ViewModels.csproj" />
+    <ProjectReference Include="..\ProjectK.Games.LCR.Views\ProjectK.Games.LCR.Views.csproj" />
+  </ItemGroup>
+
 </Project>
