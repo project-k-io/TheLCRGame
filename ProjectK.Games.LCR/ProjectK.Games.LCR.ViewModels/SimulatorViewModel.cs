@@ -4,12 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 namespace ProjectK.Games.LCR.ViewModels
 {
-    public class SimulatorViewModel
+    public class SimulatorViewModel: ViewModelBase
     {
+        #region Fields
+
+        private int _selectedPresetGameIndex;
+        private int _numberOfPlayers;
+        private int _numberOfGames;
+
+        #endregion
+
+        #region Properties
+
+        public int SelectedPresetGameIndex
+        {
+            get => _selectedPresetGameIndex;
+            set => Set(ref _selectedPresetGameIndex, value);
+        }
+        public int NumberOfPlayers
+        {
+            get => _numberOfPlayers;
+            set => Set(ref _numberOfPlayers, value);
+        }
+        public int NumberOfGames
+        {
+            get => _numberOfGames;
+            set => Set(ref _numberOfGames, value);
+        }
+        public GameViewModel Game { get; set; } = new() { NumberOfPlayers = 3, NumberOfGames = 100 };
+
         public List<GameViewModel> PresetGames { get; set; } = new()
         {
             new() { NumberOfPlayers = 3, NumberOfGames = 100 },
@@ -21,31 +49,38 @@ namespace ProjectK.Games.LCR.ViewModels
             new() { NumberOfPlayers = 7, NumberOfGames = 100 },
         };
 
-        public GameViewModel Game { get; set; } = new() { NumberOfPlayers = 3, NumberOfGames = 100 };
+        #endregion
+
+        #region Commands
 
         public ICommand PlayCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand SetGameCommand { get; set; }
+
+        #endregion
 
         public SimulatorViewModel()
         {
+            // Init 
+            SelectedPresetGameIndex = 0;
+            OnSetGame();
+
+            // Set Commands
             PlayCommand = new RelayCommand(OnPlay);
             CancelCommand = new RelayCommand(OnCancel);
+            SetGameCommand  = new RelayCommand(OnSetGame);
         }
 
+        private void OnSetGame()
+        {
+            var selectedGame = PresetGames[SelectedPresetGameIndex];
+            NumberOfPlayers = selectedGame.NumberOfPlayers;
+            NumberOfGames = selectedGame.NumberOfGames;
+        }
         private void OnCancel()
         {
             throw new NotImplementedException();
         }
-
-        PlayerViewModel GetLeftPlayer(int index, PlayerViewModel[] players)
-        {
-            return players[index > 0 ? index - 1 : players.Length - 1];
-        }
-        PlayerViewModel GetRightPlayer(int index, PlayerViewModel[] players)
-        {
-            return players[index < players.Length - 1 ? index + 1 : 0];
-        }
-
         private void OnPlay()
         {
             var numberOfGames = Game.NumberOfGames;

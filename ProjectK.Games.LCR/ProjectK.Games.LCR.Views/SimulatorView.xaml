@@ -6,11 +6,15 @@
              xmlns:local="clr-namespace:ProjectK.Games.LCR.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="519*"/>
-        </Grid.ColumnDefinitions>
-        <local:GameSettingsView Grid.Column="0" Grid.Row="0"></local:GameSettingsView>
-    </Grid>
+    <Border BorderThickness="5" BorderBrush="LightGray">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="519*"/>
+            </Grid.ColumnDefinitions>
+            <local:GameSettingsView Grid.Column="0" Grid.Row="0"></local:GameSettingsView>
+            <GridSplitter Grid.Column="1" Width="5" Background="LightGray" Margin="0,10, 0, 10" />
+        </Grid>
+    </Border>
 </UserControl>

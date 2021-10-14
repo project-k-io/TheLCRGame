@@ -5,4 +5,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectK.Games.LCR.ViewModels\ProjectK.Games.LCR.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
