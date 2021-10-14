@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectK.Games.LCR.WinApp", "ProjectK.Games.LCR.WinApp\ProjectK.Games.LCR.WinApp.csproj", "{DFFE0ACE-3EFE-4F69-9077-3D1FB048A84E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectK.Games.LCR.ViewModels", "ProjectK.Games.LCR.ViewModels\ProjectK.Games.LCR.ViewModels.csproj", "{D7D574BB-88D9-45F1-9502-4500F3A7ECFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectK.Games.LCR.Views", "ProjectK.Games.LCR.Views\ProjectK.Games.LCR.Views.csproj", "{2B49385E-4345-402E-9B42-CDD8F6A0EE20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{DFFE0ACE-3EFE-4F69-9077-3D1FB048A84E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFFE0ACE-3EFE-4F69-9077-3D1FB048A84E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFFE0ACE-3EFE-4F69-9077-3D1FB048A84E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D574BB-88D9-45F1-9502-4500F3A7ECFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D574BB-88D9-45F1-9502-4500F3A7ECFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D574BB-88D9-45F1-9502-4500F3A7ECFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D574BB-88D9-45F1-9502-4500F3A7ECFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B49385E-4345-402E-9B42-CDD8F6A0EE20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B49385E-4345-402E-9B42-CDD8F6A0EE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B49385E-4345-402E-9B42-CDD8F6A0EE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B49385E-4345-402E-9B42-CDD8F6A0EE20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
