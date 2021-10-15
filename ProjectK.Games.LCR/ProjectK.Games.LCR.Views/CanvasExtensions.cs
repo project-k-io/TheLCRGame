@@ -34,13 +34,13 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Add(textBlock);
         }
 
-        public static List<double> GetAxisCenters(double y1, double y2, int n, int delta)
+        public static List<double> GetAxisCenters(double n1, double n2, int n, int delta)
         {
-            var step = (y2 - y1) / n;
+            var step = (n2 - n1) / n;
             var points = new List<double>();
             for (var i = 0; i <= n; i += delta)
             {
-                var center = y2 - step * i;
+                var center = n1 + step * i;
                 points.Add(center);
             }
             return points;
