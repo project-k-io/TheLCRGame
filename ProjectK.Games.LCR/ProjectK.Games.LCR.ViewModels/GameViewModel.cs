@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 
 namespace ProjectK.Games.LCR.ViewModels
 {
@@ -12,9 +7,11 @@ namespace ProjectK.Games.LCR.ViewModels
     {
         public int Turns { get; set; }
         public int Index { get; set; }
+        public int Winner { get; set; }
+
         public override string ToString()
         {
-            return $"[Index={Index,3}, Turns={Turns,3}]";
+            return $"[Index={Index,3}, Turns={Turns,3}, Winner={Winner,2}]";
         }
     }
 }

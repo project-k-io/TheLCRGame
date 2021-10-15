@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectK.Games.LCR.ViewModels;
+﻿using ProjectK.Games.LCR.ViewModels;
 
 namespace ProjectK.Games.LCR.WinApp
 {

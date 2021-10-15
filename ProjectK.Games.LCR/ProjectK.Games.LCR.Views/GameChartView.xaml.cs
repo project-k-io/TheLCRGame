@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using ScottPlot.Drawing.Colormaps;
 
 namespace ProjectK.Games.LCR.Views
 {
@@ -18,7 +16,7 @@ namespace ProjectK.Games.LCR.Views
             InitializeComponent();
         }
 
-        void Draw()
+        private void Draw()
         {
             canvas.Children.Clear();
             var c = canvas;
@@ -27,7 +25,7 @@ namespace ProjectK.Games.LCR.Views
             DrawAxis(r, 8, 1000);
         }
 
-        void DrawAxis(Rect r, int xCount, int yCount)
+        private void DrawAxis(Rect r, int xCount, int yCount)
         {
             var yPoints = GetAxisY(r.Top, r.Bottom, r.X, xCount, 1);
             var xPoints = GetAxisX(r.X, r.Width, r.Bottom, yCount,  1);
@@ -53,13 +51,14 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Add(text);
         }
 
-        (Point left, Point right) GetYPointLine(Point center, int width)
+        private (Point left, Point right) GetYPointLine(Point center, int width)
         {
             var left = new Point(center.X - width, center.Y);
             var right = new Point(center.X + width, center.Y);
             return (left, right);
         }
-        (Point top, Point bottom) GetXPointLine(Point center, int height)
+
+        private (Point top, Point bottom) GetXPointLine(Point center, int height)
         {
             var top = new Point(center.X , center.Y - height);
             var bottom= new Point(center.X, center.Y + height);
@@ -67,7 +66,7 @@ namespace ProjectK.Games.LCR.Views
         }
 
 
-        List<Point> GetAxisY(double y1, double y2, double x, int n, int width)
+        private List<Point> GetAxisY(double y1, double y2, double x, int n, int width)
         {
             int delta = n > 10 ? n / 10 : 1;
             var step = (y2 - y1) / n;
@@ -81,7 +80,8 @@ namespace ProjectK.Games.LCR.Views
             }
             return points;
         }
-        List<Point> GetAxisX(double x1, double x2, double y, int n, int height)
+
+        private List<Point> GetAxisX(double x1, double x2, double y, int n, int height)
         {
             int delta = n > 10 ? n / 10 : 1;
             var step = (x2 - x1) / n;
