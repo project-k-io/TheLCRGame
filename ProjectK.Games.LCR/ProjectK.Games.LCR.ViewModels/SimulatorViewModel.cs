@@ -49,6 +49,7 @@ namespace ProjectK.Games.LCR.ViewModels
             new() { NumberOfPlayers = 7, NumberOfGames = 100 },
         };
 
+
         #endregion
 
         #region Commands
