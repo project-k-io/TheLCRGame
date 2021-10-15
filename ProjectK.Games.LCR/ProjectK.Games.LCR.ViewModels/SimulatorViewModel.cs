@@ -86,12 +86,12 @@ namespace ProjectK.Games.LCR.ViewModels
         {
             var numberOfGames = Game.NumberOfGames;
             var numberOfPlayers = Game.NumberOfPlayers;
-            PlayerViewModel[] players = new PlayerViewModel[numberOfPlayers];
+            var players = new PlayerViewModel[numberOfPlayers];
 
-            Random rnd = new Random();
+            var rnd = new Random();
             for (var gameIndex = 0; gameIndex < numberOfGames; gameIndex++)
             {
-                int playerIndex = 0;
+                var playerIndex = 0;
                 while(true) 
                 {
                     var player = players[playerIndex++];

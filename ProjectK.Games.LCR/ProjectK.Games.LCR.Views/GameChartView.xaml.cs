@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ScottPlot.Drawing.Colormaps;
 
 namespace ProjectK.Games.LCR.Views
 {
@@ -25,18 +26,20 @@ namespace ProjectK.Games.LCR.Views
         void Draw()
         {
             canvas.Children.Clear();
-            Rect bounds = this.TransformToVisual(canvas).TransformBounds(new Rect(this.RenderSize));
             var c = canvas;
-            var dd = 40;
-            var r = new Rect(dd, dd, c.ActualWidth - 2*dd, c.ActualHeight - 2*dd);
+            var offset = 40;
+            var r = new Rect(offset, offset, c.ActualWidth - 2*offset, c.ActualHeight - 2*offset);
+            DrawAxis(r, 8, 1000);
+        }
 
-            var yPoints = GetAxisY(r.Bottom, r.Top, r.X, 10, 1);
-            var xPoints = GetAxisX(r.X, r.Width, r.Bottom, 10, 1);
+        void DrawAxis(Rect r, int xCount, int yCount)
+        {
+            var yPoints = GetAxisY(r.Top, r.Bottom, r.X, xCount, 1);
+            var xPoints = GetAxisX(r.X, r.Width, r.Bottom, yCount,  1);
             var points = new List<Point>();
             points.AddRange(yPoints);
             points.AddRange(xPoints);
-            DrawLine2(points.ToArray());
-            DrawAxisX(r);
+            DrawLine(points.ToArray());
         }
 
         void DrawBorder(Rect r)
@@ -52,7 +55,7 @@ namespace ProjectK.Games.LCR.Views
             var E = new Point(x1, y1);
 
             Point[] points = { A, B, C, D, E };
-            DrawLine2(points);
+            DrawLine(points);
         }
         void DrawAxisY(Rect r)
         {
@@ -63,7 +66,7 @@ namespace ProjectK.Games.LCR.Views
             var A = new Point(x1, y1);
             var D = new Point(x1, y2);
             Point[] points = { A, D };
-            DrawLine2(points);
+            DrawLine(points);
         }
 
         internal void DrawRectWithText(double x, double y, string n)
@@ -98,9 +101,10 @@ namespace ProjectK.Games.LCR.Views
 
         List<Point> GetAxisY(double y1, double y2, double x, int n, int width)
         {
+            int delta = n > 10 ? n / 10 : 1;
             var step = (y2 - y1) / n;
             var points = new List<Point>();
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i <= n; i+=delta)
             {
                 var center = new Point(x, y2 - step * i);
                 var (left, right) = GetYPointLine(center, width);
@@ -111,9 +115,10 @@ namespace ProjectK.Games.LCR.Views
         }
         List<Point> GetAxisX(double x1, double x2, double y, int n, int height)
         {
+            int delta = n > 10 ? n / 10 : 1;
             var step = (x2 - x1) / n;
             var points = new List<Point>();
-            for (var i = 0; i < n; i++)
+            for (var i = 0; i <= n; i += delta)
             {
                 var center = new Point(x1 + step * i, y);
                 var (top, bottom) = GetXPointLine(center, height);
@@ -123,33 +128,6 @@ namespace ProjectK.Games.LCR.Views
             return points;
         }
 
-        void DrawAxisX(Rect r)
-        {
-            var x1 = r.X;
-            var y1 = r.Y;
-            var x2 = r.Right;
-            var y2 = r.Bottom;
-            var C = new Point(x2, y2);
-            var D = new Point(x1, y2);
-            Point[] points = { D, C };
-            DrawLine2(points);
-        }
-
-        void DrawBorder()
-        {
-            var x1 = 10;
-            var y1 = 10;
-            var x2 = canvas.ActualWidth - 10;
-            var y2 = canvas.ActualHeight - 10;
-            var A = new Point(x1, y1);
-            var B = new Point(x2, y1);
-            var C = new Point(x2, y2);
-            var D = new Point(x1, y2);
-            var E = new Point(x1, y1);
-
-            Point[] points = { A, B, C, D, E };
-            DrawLine2(points);
-        }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
@@ -158,28 +136,11 @@ namespace ProjectK.Games.LCR.Views
         }
 
 
-        void AddLine(int x1, int y1, int x2, int y2)
-        { // Create a red Ellipse.
-            var line = new Line();
-            line.X1 = x1;
-            line.Y1 = y1;
-            line.X2 = x2;
-            line.Y2 = y2;
-
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
-            line.Fill = mySolidColorBrush;
-            line.StrokeThickness = 2;
-            line.Stroke = Brushes.Black;
-
-            myStackPanel.Children.Add(line);
-        }
-
-        private void DrawLine2(Point[] points)
+        private void DrawLine(Point[] points)
         {
-            Polyline line = new Polyline();
-            PointCollection collection = new PointCollection();
-            foreach (Point p in points)
+            var line = new Polyline();
+            var collection = new PointCollection();
+            foreach (var p in points)
             {
                 collection.Add(p);
             }

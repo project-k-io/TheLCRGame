@@ -19,7 +19,7 @@ namespace ProjectK.Games.LCR.ViewModels
             var numberOfRollingDices = NumberOfChips > MaxNumberOfChips ? MaxNumberOfChips : NumberOfChips;
             var dice = new DiceViewModel();
             var sides = new List<DiceSide>();
-            for (int index = 0; index < numberOfRollingDices; index++)
+            for (var index = 0; index < numberOfRollingDices; index++)
             {
                   dice.Roll(rnd);
                   sides.Add(dice.RolledSide);
