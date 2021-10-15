@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ProjectK.Games.LCR.ViewModels;
 
 namespace ProjectK.Games.LCR.Views
 {
@@ -11,9 +12,26 @@ namespace ProjectK.Games.LCR.Views
     /// </summary>
     public partial class GameChartView : UserControl
     {
+        private SimulatorViewModel _simulator;
+
         public GameChartView()
         {
             InitializeComponent();
+            this.Loaded += OnLoaded; 
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is SimulatorViewModel model)
+            {
+                _simulator = model;
+                _simulator.PlayFinished += PlayFinished;
+            }
+        }
+
+        private void PlayFinished()
+        {
+            Draw();
         }
 
         private void Draw()
@@ -22,99 +40,28 @@ namespace ProjectK.Games.LCR.Views
             var c = canvas;
             var offset = 40;
             var r = new Rect(offset, offset, c.ActualWidth - 2*offset, c.ActualHeight - 2*offset);
-            DrawAxis(r, 8, 1000);
+            if (_simulator != null)
+            {
+                var numberOfGames = _simulator.NumberOfGames;
+                var numberOfTunes = _simulator.NumberOfTurns;
+                DrawAxises(r, numberOfGames, numberOfTunes);
+            }
         }
 
-        private void DrawAxis(Rect r, int xCount, int yCount)
+        private void DrawAxises(Rect r, int xCount, int yCount)
         {
-            var yPoints = GetAxisY(r.Top, r.Bottom, r.X, xCount, 1);
-            var xPoints = GetAxisX(r.X, r.Width, r.Bottom, yCount,  1);
+            var xPoints = canvas.GetAxisX(r.X, r.Width, r.Bottom, xCount, 1);
+            var yPoints = canvas.GetAxisY(r.Top, r.Bottom, r.X, yCount, 1);
             var points = new List<Point>();
             points.AddRange(yPoints);
             points.AddRange(xPoints);
-            DrawLine(points.ToArray());
-        }
-
-        internal void DrawRectWithText(double x, double y, string n)
-        {
-
-            var text = new TextBlock()
-            {
-                Text = n
-            };
-            // Use Canvas's static methods to position the text
-            Canvas.SetLeft(text, x);
-            Canvas.SetTop(text, y);
-
-            // Draw the rectange and the text to my Canvas control.
-            // DrawCanvas is the name of my Canvas control in the XAML code
-            canvas.Children.Add(text);
-        }
-
-        private (Point left, Point right) GetYPointLine(Point center, int width)
-        {
-            var left = new Point(center.X - width, center.Y);
-            var right = new Point(center.X + width, center.Y);
-            return (left, right);
-        }
-
-        private (Point top, Point bottom) GetXPointLine(Point center, int height)
-        {
-            var top = new Point(center.X , center.Y - height);
-            var bottom= new Point(center.X, center.Y + height);
-            return (top, bottom);
-        }
-
-
-        private List<Point> GetAxisY(double y1, double y2, double x, int n, int width)
-        {
-            int delta = n > 10 ? n / 10 : 1;
-            var step = (y2 - y1) / n;
-            var points = new List<Point>();
-            for (var i = 0; i <= n; i+=delta)
-            {
-                var center = new Point(x, y2 - step * i);
-                var (left, right) = GetYPointLine(center, width);
-                points.AddRange(new [] {center, left, center, right, center});
-                DrawRectWithText(left.X - 20, left.Y - 10, i.ToString());
-            }
-            return points;
-        }
-
-        private List<Point> GetAxisX(double x1, double x2, double y, int n, int height)
-        {
-            int delta = n > 10 ? n / 10 : 1;
-            var step = (x2 - x1) / n;
-            var points = new List<Point>();
-            for (var i = 0; i <= n; i += delta)
-            {
-                var center = new Point(x1 + step * i, y);
-                var (top, bottom) = GetXPointLine(center, height);
-                points.AddRange(new[] { center, top, center, bottom, center });
-                DrawRectWithText(bottom.X-5, bottom.Y + 10, i.ToString());
-            }
-            return points;
+            canvas.DrawLine(points.ToArray());
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
             Draw();
-        }
-
-
-        private void DrawLine(Point[] points)
-        {
-            var line = new Polyline();
-            var collection = new PointCollection();
-            foreach (var p in points)
-            {
-                collection.Add(p);
-            }
-            line.Points = collection;
-            line.Stroke = new SolidColorBrush(Colors.Black);
-            line.StrokeThickness = 1;
-            canvas.Children.Add(line);
         }
     }
 }

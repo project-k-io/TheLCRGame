@@ -10,6 +10,9 @@ namespace ProjectK.Games.LCR.ViewModels
 {
     public class SimulatorViewModel : ViewModelBase
     {
+        public Action PlayFinished { get; set; }
+
+
         #region Fields
 
         private readonly List<PlayerViewModel> _players = new List<PlayerViewModel>();
@@ -18,8 +21,8 @@ namespace ProjectK.Games.LCR.ViewModels
         private int _selectedPresetGameIndex;
         private int _numberOfPlayers;
         private int _numberOfGames;
-        private int _shortestLengthGameIndex;
-        private int _longestLengthGameIndex;
+        private int _shortestLengthGameIndex = -1;
+        private int _longestLengthGameIndex = -1;
         private int _averageLengthGame;
 
 
@@ -69,6 +72,7 @@ namespace ProjectK.Games.LCR.ViewModels
             new() { NumberOfPlayers = 7, NumberOfGames = 100 },
         };
 
+        public int NumberOfTurns { get; set;}
 
         #endregion
 
@@ -127,6 +131,7 @@ namespace ProjectK.Games.LCR.ViewModels
         {
             Play();
             Analyze();
+            PlayFinished?.Invoke();
         }
 
         private void Play()
@@ -191,6 +196,7 @@ namespace ProjectK.Games.LCR.ViewModels
             }
             Logger.LogDebug($"Game Finished");
         }
+
         private void Analyze()
         {
             var shortestLengthTurns = int.MaxValue;
@@ -198,13 +204,12 @@ namespace ProjectK.Games.LCR.ViewModels
             var longestLengthTurns = int.MinValue;
             int longestLengthGameIndex = 0;
             var totalTurnsLength = 0;
-            var totalTurnsCount = 0;
+            NumberOfTurns = 0;
 
             foreach (var game in _games)
             {
                 var turns = game.Turns;
                 totalTurnsLength += turns;
-                totalTurnsCount++;
                 if (turns < shortestLengthTurns)
                 {
                     shortestLengthTurns = turns;
@@ -218,11 +223,12 @@ namespace ProjectK.Games.LCR.ViewModels
                 }
             }
 
+            NumberOfTurns = longestLengthTurns;
             ShortestLengthGameIndex = shortestLengthGameIndex;
             LongestLengthGameIndex = longestLengthGameIndex;
-            AverageLengthGame = totalTurnsCount != 0 ? totalTurnsLength / totalTurnsCount : 0;
+            AverageLengthGame = NumberOfTurns != 0 ? totalTurnsLength / NumberOfTurns : 0;
             var game1 = _games[shortestLengthGameIndex];
-            Logger.LogDebug($"Shotest=[Index={game1.Index}, Turns={game1.Turns}");
+            Logger.LogDebug($"Shortest=[Index={game1.Index}, Turns={game1.Turns}");
             var game2 = _games[longestLengthGameIndex];
             Logger.LogDebug($"Longest=[Index={game2.Index}, Turns={game2.Turns}");
             Logger.LogDebug($"Average=[{AverageLengthGame}]");
