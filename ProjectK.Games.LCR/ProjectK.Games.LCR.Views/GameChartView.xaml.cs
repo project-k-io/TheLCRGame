@@ -53,8 +53,8 @@ namespace ProjectK.Games.LCR.Views
             var xPoints = canvas.GetAxisX(r.X, r.Width, r.Bottom, xCount, 1);
             var yPoints = canvas.GetAxisY(r.Bottom, r.Top, r.X, yCount, 1);
             var points = new List<Point>();
-            points.AddRange(yPoints);
-            points.AddRange(xPoints);
+            points.AddRange(yPoints.axis);
+            points.AddRange(xPoints.axis);
             canvas.DrawLine(points.ToArray());
         }
 

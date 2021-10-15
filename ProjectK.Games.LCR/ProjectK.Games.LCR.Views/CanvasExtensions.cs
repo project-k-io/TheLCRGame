@@ -46,39 +46,42 @@ namespace ProjectK.Games.LCR.Views
             return points;
         }
 
-        public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
+        public static (List<Point> axis, List<Point> centers) GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var centers = GetAxisCenters(y1, y2, n, delta);
-            var points = new List<Point>();
-            for (var i = 0; i < centers.Count; i++)
+            var points = GetAxisCenters(y1, y2, n, delta);
+            var axis = new List<Point>();
+            var centers = new List<Point>();
+            for (var i = 0; i < points.Count; i++)
             {
-                var y = centers[i];
+                var y = points[i];
                 var center = new Point(x, y);
+                centers.Add(center);
                 var (left, right) = center.GetYPointLine(width);
-                points.AddRange(new[] { center, left, center, right, center });
+                axis.AddRange(new[] { center, left, center, right, center });
                 var index = i * delta;
                 canvas.DrawText(left.X - 20, left.Y - 10, index.ToString());
             }
-            return points;
+            return (axis, centers);
         }
 
-        public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
+        public static (List<Point> axis, List<Point> centers) GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var centers = GetAxisCenters(x1, x2,  n, delta);
-            var step = (x2 - x1) / n;
-            var points = new List<Point>();
-            for (var i = 0; i < centers.Count; i++)
+            var points = GetAxisCenters(x1, x2,  n, delta);
+            var axis = new List<Point>();
+            var centers = new List<Point>();
+            for (var i = 0; i < points.Count; i++)
             {
-                var x = centers[i];
+                var x = points[i];
                 var center = new Point(x, y);
+                centers.Add(center);
                 var (top, bottom) = center.GetXPointLine(height);
-                points.AddRange(new[] { center, top, center, bottom, center });
+                axis.AddRange(new[] { center, top, center, bottom, center });
                 var index = i * delta;
                 canvas.DrawText(bottom.X - 5, bottom.Y + 10, index.ToString());
             }
-            return points;
+            return (axis, centers);
         }
 
         public static (Point left, Point right) GetYPointLine(this Point center, int width)
