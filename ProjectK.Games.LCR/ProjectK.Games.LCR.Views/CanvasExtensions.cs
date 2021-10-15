@@ -33,8 +33,7 @@ namespace ProjectK.Games.LCR.Views
             Canvas.SetTop(textBlock, y);
             canvas.Children.Add(textBlock);
         }
-
-        public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
+        public static List<Point> GetAxisYCenters(double y1, double y2, double x, int n)
         {
             int delta = n > 10 ? n / 10 : 1;
             var step = (y2 - y1) / n;
@@ -42,6 +41,18 @@ namespace ProjectK.Games.LCR.Views
             for (var i = 0; i <= n; i += delta)
             {
                 var center = new Point(x, y2 - step * i);
+                points.Add( center);
+            }
+            return points;
+        }
+
+        public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
+        {
+            var centers = GetAxisYCenters(y1, y2, x, n);
+            var points = new List<Point>();
+            for (var i = 0; i < centers.Count; i ++)
+            {
+                var center = centers[i];
                 var (left, right) = center.GetYPointLine(width);
                 points.AddRange(new[] { center, left, center, right, center });
                 canvas.DrawText(left.X - 20, left.Y - 10, i.ToString());
