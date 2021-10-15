@@ -50,11 +50,11 @@ namespace ProjectK.Games.LCR.Views
 
         private void DrawAxises(Rect r, int xCount, int yCount)
         {
-            var xPoints = canvas.GetAxisX(r.X, r.Width, r.Bottom, xCount, 1);
-            var yPoints = canvas.GetAxisY(r.Bottom, r.Top, r.X, yCount, 1);
+            var (xAxis, xCenters) = canvas.GetAxisX(r.X, r.Width, r.Bottom, xCount, 1);
+            var (yAxis, yCenters) = canvas.GetAxisY(r.Bottom, r.Top, r.X, yCount, 1);
             var points = new List<Point>();
-            points.AddRange(yPoints.axis);
-            points.AddRange(xPoints.axis);
+            points.AddRange(yAxis);
+            points.AddRange(xAxis);
             canvas.DrawLine(points.ToArray());
         }
 
