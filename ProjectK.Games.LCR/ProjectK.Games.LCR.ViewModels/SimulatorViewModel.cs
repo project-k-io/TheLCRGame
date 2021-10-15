@@ -17,7 +17,7 @@ namespace ProjectK.Games.LCR.ViewModels
 
         private readonly List<PlayerViewModel> _players = new List<PlayerViewModel>();
         private readonly List<GameViewModel> _games = new List<GameViewModel>();
-        private Random _random = new Random();
+        private readonly Random _random = new Random();
         private int _selectedPresetGameIndex;
         private int _numberOfPlayers;
         private int _numberOfGames;
@@ -73,6 +73,8 @@ namespace ProjectK.Games.LCR.ViewModels
         };
 
         public int NumberOfTurns { get; set;}
+        public List<PlayerViewModel> Players => _players;
+        public List<GameViewModel> Games => _games;
 
         #endregion
 

@@ -12,7 +12,12 @@ namespace ProjectK.Games.LCR.Views
 {
     public static class CanvasExtensions
     {
-        public static void DrawLine(this Canvas canvas, Point[] points)
+        public static void DrawLine(this Canvas canvas, List<Point> points, System.Windows.Media.Color color)
+        {
+            canvas.DrawLine(points.ToArray(), color);
+        }
+
+        public static void DrawLine(this Canvas canvas, Point[] points, System.Windows.Media.Color color)
         {
             var line = new Polyline();
             var collection = new PointCollection();
@@ -21,7 +26,7 @@ namespace ProjectK.Games.LCR.Views
                 collection.Add(p);
             }
             line.Points = collection;
-            line.Stroke = new SolidColorBrush(Colors.Black);
+            line.Stroke = new SolidColorBrush(color);
             line.StrokeThickness = 1;
             canvas.Children.Add(line);
         }
@@ -46,42 +51,38 @@ namespace ProjectK.Games.LCR.Views
             return points;
         }
 
-        public static (List<Point> axis, List<Point> centers) GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
+        public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var points = GetAxisCenters(y1, y2, n, delta);
+            var centers = GetAxisCenters(y1, y2, n, delta);
             var axis = new List<Point>();
-            var centers = new List<Point>();
-            for (var i = 0; i < points.Count; i++)
+            for (var i = 0; i < centers.Count; i++)
             {
-                var y = points[i];
-                var center = new Point(x, y);
-                centers.Add(center);
-                var (left, right) = center.GetYPointLine(width);
-                axis.AddRange(new[] { center, left, center, right, center });
+                var y = centers[i];
+                var point = new Point(x, y);
+                var (left, right) = point.GetYPointLine(width);
+                axis.AddRange(new[] { point, left, point, right, point });
                 var index = i * delta;
                 canvas.DrawText(left.X - 20, left.Y - 10, index.ToString());
             }
-            return (axis, centers);
+            return axis;
         }
 
-        public static (List<Point> axis, List<Point> centers) GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
+        public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var points = GetAxisCenters(x1, x2,  n, delta);
+            var centers = GetAxisCenters(x1, x2,  n, delta);
             var axis = new List<Point>();
-            var centers = new List<Point>();
-            for (var i = 0; i < points.Count; i++)
+            for (var i = 0; i < centers.Count; i++)
             {
-                var x = points[i];
-                var center = new Point(x, y);
-                centers.Add(center);
-                var (top, bottom) = center.GetXPointLine(height);
-                axis.AddRange(new[] { center, top, center, bottom, center });
+                var x = centers[i];
+                var point = new Point(x, y);
+                var (top, bottom) = point.GetXPointLine(height);
+                axis.AddRange(new[] { point, top, point, bottom, point });
                 var index = i * delta;
                 canvas.DrawText(bottom.X - 5, bottom.Y + 10, index.ToString());
             }
-            return (axis, centers);
+            return axis;
         }
 
         public static (Point left, Point right) GetYPointLine(this Point center, int width)

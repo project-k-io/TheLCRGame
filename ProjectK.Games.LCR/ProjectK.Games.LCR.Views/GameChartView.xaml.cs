@@ -17,7 +17,7 @@ namespace ProjectK.Games.LCR.Views
         public GameChartView()
         {
             InitializeComponent();
-            this.Loaded += OnLoaded; 
+            this.Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -39,23 +39,47 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Clear();
             var c = canvas;
             var offset = 40;
-            var r = new Rect(offset, offset, c.ActualWidth - 2*offset, c.ActualHeight - 2*offset);
+            var r = new Rect(offset, offset, c.ActualWidth - 2 * offset, c.ActualHeight - 2 * offset);
             if (_simulator != null)
             {
-                var numberOfGames = _simulator.NumberOfGames;
-                var numberOfTunes = _simulator.NumberOfTurns;
-                DrawAxises(r, numberOfGames, numberOfTunes);
+                var x1 = r.X;
+                var x2 = r.Width;
+                var y1 = r.Bottom;
+                var y2 = r.Top;
+
+                var xCount = _simulator.NumberOfGames;
+                var yCount = _simulator.NumberOfTurns;
+
+                DrawAxis(x1, y1, x2, y2, xCount, yCount);
+                DrawChart(x1, y1, x2, y2, xCount, yCount);
             }
         }
 
-        private void DrawAxises(Rect r, int xCount, int yCount)
+        void DrawAxis(double x1, double y1, double x2, double y2, int xCount, int yCount)
         {
-            var (xAxis, xCenters) = canvas.GetAxisX(r.X, r.Width, r.Bottom, xCount, 1);
-            var (yAxis, yCenters) = canvas.GetAxisY(r.Bottom, r.Top, r.X, yCount, 1);
+            var xAxis = canvas.GetAxisX(x1, x2, y1, xCount, 1);
+            var yAxis = canvas.GetAxisY(y1, y2, x1, yCount, 1);
             var points = new List<Point>();
             points.AddRange(yAxis);
             points.AddRange(xAxis);
-            canvas.DrawLine(points.ToArray());
+            canvas.DrawLine(points, Colors.Black);
+        }
+
+
+        void DrawChart(double x1, double y1, double x2, double y2, int xCount, int yCount)
+        {
+            var xCenters = CanvasExtensions.GetAxisCenters(x1, x2, xCount, 1);
+            var yCenters = CanvasExtensions.GetAxisCenters(y1, y2, yCount, 1);
+            var games = _simulator.Games;
+            var points = new List<Point>();
+            foreach (var game in games)
+            {
+                var x = xCenters[game.Index];
+                var y = yCenters[game.Turns];
+                var point = new Point(x, y);
+                points.Add(point);
+            }
+            canvas.DrawLine(points, Colors.Red);
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
