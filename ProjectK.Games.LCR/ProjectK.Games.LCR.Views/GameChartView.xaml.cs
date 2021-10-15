@@ -38,7 +38,7 @@ namespace ProjectK.Games.LCR.Views
         {
             canvas.Children.Clear();
             var c = canvas;
-            var offset = 40;
+            var offset = 50;
             var r = new Rect(offset, offset, c.ActualWidth - 2 * offset, c.ActualHeight - 2 * offset);
             if (_simulator != null)
             {
@@ -52,6 +52,7 @@ namespace ProjectK.Games.LCR.Views
 
                 DrawAxis(x1, y1, x2, y2, xCount, yCount);
                 DrawChart(x1, y1, x2, y2, xCount, yCount);
+                DrawAverage(x1, y1, x2, y2, yCount);
             }
         }
 
@@ -80,6 +81,18 @@ namespace ProjectK.Games.LCR.Views
                 points.Add(point);
             }
             canvas.DrawLine(points, Colors.Red);
+        }
+        void DrawAverage(double x1, double y1, double x2, double y2, int yCount)
+        {
+            var yCenters = CanvasExtensions.GetAxisCenters(y1, y2, yCount, 1);
+
+            var y = yCenters[_simulator.AverageLengthGame];
+            var p1 = new Point(x1, y);
+            var p2 = new Point(x2, y);
+            var points = new List<Point>();
+            points.Add(p1);
+            points.Add(p2);
+            canvas.DrawLine(points, Colors.Green);
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)

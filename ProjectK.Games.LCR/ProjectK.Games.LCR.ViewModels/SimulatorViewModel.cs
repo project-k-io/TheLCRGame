@@ -228,7 +228,7 @@ namespace ProjectK.Games.LCR.ViewModels
             NumberOfTurns = longestLengthTurns;
             ShortestLengthGameIndex = shortestLengthGameIndex;
             LongestLengthGameIndex = longestLengthGameIndex;
-            AverageLengthGame = NumberOfTurns != 0 ? totalTurnsLength / NumberOfTurns : 0;
+            AverageLengthGame = totalTurnsLength / _games.Count;
             var game1 = _games[shortestLengthGameIndex];
             Logger.LogDebug($"Shortest=[Index={game1.Index}, Turns={game1.Turns}");
             var game2 = _games[longestLengthGameIndex];

@@ -27,7 +27,7 @@ namespace ProjectK.Games.LCR.Views
             }
             line.Points = collection;
             line.Stroke = new SolidColorBrush(color);
-            line.StrokeThickness = 1;
+            line.StrokeThickness = 2;
             canvas.Children.Add(line);
         }
 
@@ -63,7 +63,7 @@ namespace ProjectK.Games.LCR.Views
                 var (left, right) = point.GetYPointLine(width);
                 axis.AddRange(new[] { point, left, point, right, point });
                 var index = i * delta;
-                canvas.DrawText(left.X - 20, left.Y - 10, index.ToString());
+                canvas.DrawText(left.X - 30, left.Y - 10, index.ToString());
             }
             return axis;
         }
@@ -80,7 +80,7 @@ namespace ProjectK.Games.LCR.Views
                 var (top, bottom) = point.GetXPointLine(height);
                 axis.AddRange(new[] { point, top, point, bottom, point });
                 var index = i * delta;
-                canvas.DrawText(bottom.X - 5, bottom.Y + 10, index.ToString());
+                canvas.DrawText(bottom.X - 15, bottom.Y + 10, index.ToString());
             }
             return axis;
         }
