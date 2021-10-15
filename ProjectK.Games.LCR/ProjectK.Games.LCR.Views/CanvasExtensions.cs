@@ -33,17 +33,38 @@ namespace ProjectK.Games.LCR.Views
             Canvas.SetTop(textBlock, y);
             canvas.Children.Add(textBlock);
         }
-        public static List<Point> GetAxisYCenters(double y1, double y2, double x, int n, int delta)
+
+        public static List<double> GetAxisCenters(double y1, double y2, int n, int delta)
         {
             var step = (y2 - y1) / n;
-            var points = new List<Point>();
+            var points = new List<double>();
             for (var i = 0; i <= n; i += delta)
             {
-                var center = new Point(x, y2 - step * i);
+                var center = y2 - step * i;
                 points.Add(center);
             }
             return points;
         }
+
+        public static List<Point> GetAxisYCenters(double y1, double y2, double x, int n, int delta)
+        {
+            var centers =  GetAxisCenters(y1, y2, n, delta);
+            return centers.Select(y => new Point(x, y)).ToList();
+        }
+
+        public static List<Point> GetAxisXCenters(double x1, double x2, double y, int n, int delta)
+        {
+
+            var step = (x2 - x1) / n;
+            var points = new List<Point>();
+            for (var i = 0; i <= n; i += delta)
+            {
+                var center = new Point(x1 + step * i, y);
+                points.Add(center);
+            }
+            return points;
+        }
+
 
         public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
         {
@@ -57,18 +78,6 @@ namespace ProjectK.Games.LCR.Views
                 points.AddRange(new[] { center, left, center, right, center });
                 var axisIndex = centerIndex * delta;
                 canvas.DrawText(left.X - 20, left.Y - 10, axisIndex.ToString());
-            }
-            return points;
-        }
-
-        public static List<Point> GetAxisXCenters(double x1, double x2, double y, int n, int delta)
-        {
-            var step = (x2 - x1) / n;
-            var points = new List<Point>();
-            for (var i = 0; i <= n; i += delta)
-            {
-                var center = new Point(x1 + step * i, y);
-                points.Add(center);
             }
             return points;
         }
