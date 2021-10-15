@@ -13,14 +13,9 @@ namespace ProjectK.Games.LCR.Views
     /// </summary>
     public partial class GameChartView : UserControl
     {
-        StackPanel myStackPanel = new StackPanel();
-
         public GameChartView()
         {
             InitializeComponent();
-
-
-
         }
 
         void Draw()
@@ -40,33 +35,6 @@ namespace ProjectK.Games.LCR.Views
             points.AddRange(yPoints);
             points.AddRange(xPoints);
             DrawLine(points.ToArray());
-        }
-
-        void DrawBorder(Rect r)
-        {
-            var x1 = r.X;
-            var y1 = r.Y;
-            var x2 = r.Right;
-            var y2 = r.Bottom;
-            var A = new Point(x1, y1);
-            var B = new Point(x2, y1);
-            var C = new Point(x2, y2);
-            var D = new Point(x1, y2);
-            var E = new Point(x1, y1);
-
-            Point[] points = { A, B, C, D, E };
-            DrawLine(points);
-        }
-        void DrawAxisY(Rect r)
-        {
-            var x1 = r.X;
-            var y1 = r.Y;
-            var x2 = r.Right;
-            var y2 = r.Bottom;
-            var A = new Point(x1, y1);
-            var D = new Point(x1, y2);
-            Point[] points = { A, D };
-            DrawLine(points);
         }
 
         internal void DrawRectWithText(double x, double y, string n)
@@ -127,7 +95,6 @@ namespace ProjectK.Games.LCR.Views
             }
             return points;
         }
-
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
