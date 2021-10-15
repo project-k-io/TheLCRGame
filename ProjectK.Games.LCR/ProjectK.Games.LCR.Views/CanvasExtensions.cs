@@ -55,14 +55,8 @@ namespace ProjectK.Games.LCR.Views
         public static List<Point> GetAxisXCenters(double x1, double x2, double y, int n, int delta)
         {
 
-            var step = (x2 - x1) / n;
-            var points = new List<Point>();
-            for (var i = 0; i <= n; i += delta)
-            {
-                var center = new Point(x1 + step * i, y);
-                points.Add(center);
-            }
-            return points;
+            var centers = GetAxisCenters(x1, x2, n, delta);
+            return centers.Select(x => new Point(x, y)).ToList();
         }
 
 
