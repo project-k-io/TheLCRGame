@@ -1,9 +1,8 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
 
-namespace ProjectK.Games.LCR.ViewModels
+namespace ProjectK.Games.LCR.Models
 {
-    public class DiceViewModel : ViewModelBase
+    public class DiceModel
     {
         public DiceSide[] Sides { get; set; } =
             { DiceSide.Left, DiceSide.Center, DiceSide.Right, DiceSide.Dot, DiceSide.Dot, DiceSide.Dot };

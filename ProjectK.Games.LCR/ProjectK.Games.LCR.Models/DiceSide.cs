@@ -1,4 +1,4 @@
-﻿namespace ProjectK.Games.LCR.ViewModels
+﻿namespace ProjectK.Games.LCR.Models
 {
     public enum DiceSide
     {

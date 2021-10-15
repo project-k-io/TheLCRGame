@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ProjectK.Games.LCR.Models;
 
 namespace ProjectK.Games.LCR.ViewModels
 {
@@ -16,6 +17,8 @@ namespace ProjectK.Games.LCR.ViewModels
         private int _selectedPresetGameIndex;
         private int _numberOfPlayers;
         private int _numberOfGames;
+        List<PlayerViewModel> _players = new List<PlayerViewModel>();
+        List<GameViewModel> _games = new List<GameViewModel>();
 
         #endregion
 
@@ -36,9 +39,8 @@ namespace ProjectK.Games.LCR.ViewModels
             get => _numberOfGames;
             set => Set(ref _numberOfGames, value);
         }
-        public GameViewModel Game { get; set; } = new() { NumberOfPlayers = 3, NumberOfGames = 100 };
 
-        public List<GameViewModel> PresetGames { get; set; } = new()
+        public List<GameSettings> PresetGames { get; set; } = new()
         {
             new() { NumberOfPlayers = 3, NumberOfGames = 100 },
             new() { NumberOfPlayers = 4, NumberOfGames = 100 },
@@ -82,61 +84,119 @@ namespace ProjectK.Games.LCR.ViewModels
         {
             throw new NotImplementedException();
         }
+
+        void CreatePlayers()
+        {
+            _players.Clear();
+            for (var i = 0; i < NumberOfPlayers; i++)
+            {
+                _players.Add(new PlayerViewModel { Index = i });
+            }
+        }
+
+        void CreateGames()
+        {
+            _games.Clear();
+            for (var i = 0; i < NumberOfGames; i++)
+            {
+                _games.Add(new GameViewModel { Index = i });
+            }
+        }
+
         private void OnPlay()
         {
-            var numberOfGames = Game.NumberOfGames;
-            var numberOfPlayers = Game.NumberOfPlayers;
-            var players = new PlayerViewModel[numberOfPlayers];
-
             var rnd = new Random();
-            for (var gameIndex = 0; gameIndex < numberOfGames; gameIndex++)
+            Play(rnd);
+        }
+
+        private void Play(Random rnd)
+        {
+            List<int> xx = new List<int> { 1, 2, 3, 3 };
+
+            Logger.LogDebug($"Players={NumberOfPlayers}, Games={NumberOfGames}");
+            CreateGames();
+            foreach (var game in _games)
             {
-                var playerIndex = 0;
-                while(true) 
+#if DEBUG_DETAILS
+                Logger.LogDebug($"Game={game}");
+#endif
+                CreatePlayers();
+                bool onlyOnePlayerHasChips = false;
+                while (!onlyOnePlayerHasChips)
                 {
-                    var player = players[playerIndex++];
-
-                    // if player doesn't have chips and it's his play, he is out  
-                    if (player.NumberOfChips == 0)
-                        player.Active = false;
-
-                    // skip not active players
-                    if (!player.Active)
-                        continue;
-
-                    var activePlayers = players.Where(item => item.Active).ToList();
-                    if (activePlayers.Count == 1)
+                    for(var playerIndex=0;  playerIndex < _players.Count; playerIndex++)
                     {
-                        activePlayers[0].NumberOfWins++;
-                        break;
-                    }
+                        var player = _players[playerIndex];
+                        game.Turns++;
+#if DEBUG_DETAILS
+                        Logger.LogDebug($"Player={player}");
+#endif
+                        // if player doesn't have chips and it's his play, he is out  
+                        if (player.NumberOfChips == 0)
+                            player.Active = false;
 
-                    var activePlayerIndex = activePlayers.IndexOf(player);
-                    var leftPlayer = activePlayers.GetNextItem(activePlayerIndex);
-                    var rightPlayer = activePlayers.GetPrevItem(activePlayerIndex);
-
-                    var sides = player.Roll(rnd);
-                    foreach (var side in sides)
-                    {
-                        switch (side)
+                        // check if we have only one active player
+                        var activePlayers = _players.Where(item => item.Active).ToList();
+                        if (activePlayers.Count == 1)
                         {
-                            case DiceSide.Dot:
-                                break;
-                            case DiceSide.Left:
-                                leftPlayer.NumberOfChips++;
-                                player.NumberOfChips--;
-                                break;
-                            case DiceSide.Right:
-                                rightPlayer.NumberOfChips++;
-                                player.NumberOfChips--;
-                                break;
-                            case DiceSide.Center:
-                                player.NumberOfChips--;
-                                break;
+                            activePlayers[0].NumberOfWins++;
+                            onlyOnePlayerHasChips = true;
+                            break;
                         }
+                        // skip not active players
+                        if (!player.Active)
+                            continue;
+
+                        var activePlayerIndex = activePlayers.IndexOf(player);
+                        var leftPlayer = activePlayers.GetNextItem(activePlayerIndex);
+                        var rightPlayer = activePlayers.GetPrevItem(activePlayerIndex);
+#if DEBUG_DETAILS
+                        Logger.LogDebug($"Left  ={leftPlayer}");
+                        Logger.LogDebug($"Right ={rightPlayer}");
+#endif
+
+                        var sides = player.Roll(rnd);
+#if DEBUG_DETAILS
+                        Logger.LogDebug(sides.ToText());
+#endif
+                        foreach (var side in sides)
+                        {
+                            switch (side)
+                            {
+                                case DiceSide.Dot:
+                                    break;
+                                case DiceSide.Left:
+                                    leftPlayer.NumberOfChips++;
+                                    player.NumberOfChips--;
+                                    break;
+                                case DiceSide.Right:
+                                    rightPlayer.NumberOfChips++;
+                                    player.NumberOfChips--;
+                                    break;
+                                case DiceSide.Center:
+                                    player.NumberOfChips--;
+                                    break;
+                            }
+                        }
+
+#if DEBUG_DETAILS
+                        Logger.LogDebug($"Player={player}");
+                        Logger.LogDebug($"Left  ={leftPlayer}");
+                        Logger.LogDebug($"Right ={rightPlayer}");
+                        Logger.LogDebug("");
+#endif
                     }
                 }
+                Logger.LogDebug($"Game={game}");
             }
+
+#if DEBUG_DETAILS
+            Logger.LogDebug($"Game results");
+            foreach (var game in _games)
+                Logger.LogDebug($"Game={game}");
+
+            Logger.LogDebug($"Game Finished");
+#endif
         }
     }
 }

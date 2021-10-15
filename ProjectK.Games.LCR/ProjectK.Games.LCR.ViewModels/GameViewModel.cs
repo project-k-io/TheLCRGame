@@ -7,13 +7,14 @@ using GalaSoft.MvvmLight;
 
 namespace ProjectK.Games.LCR.ViewModels
 {
+
     public class GameViewModel : ViewModelBase
     {
-        public int NumberOfPlayers { get; set; }
-        public int NumberOfGames{ get; set; }
+        public int Turns { get; set; }
+        public int Index { get; set; }
         public override string ToString()
         {
-            return $"{NumberOfPlayers} players x {NumberOfGames} games";
+            return $"[Index={Index,3}, Turns={Turns,3}]";
         }
     }
 }

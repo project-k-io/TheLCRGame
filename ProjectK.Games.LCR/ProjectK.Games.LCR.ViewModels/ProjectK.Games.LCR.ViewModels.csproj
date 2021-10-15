@@ -8,4 +8,8 @@
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectK.Games.LCR.Models\ProjectK.Games.LCR.Models.csproj" />
+  </ItemGroup>
+
 </Project>
