@@ -28,7 +28,7 @@ namespace ProjectK.Games.LCR.Views
 
         public static void DrawText(this Canvas canvas, double x, double y, string text)
         {
-            var textBlock = new TextBlock{ Text = text };
+            var textBlock = new TextBlock { Text = text };
             Canvas.SetLeft(textBlock, x);
             Canvas.SetTop(textBlock, y);
             canvas.Children.Add(textBlock);
@@ -40,7 +40,7 @@ namespace ProjectK.Games.LCR.Views
             for (var i = 0; i <= n; i += delta)
             {
                 var center = new Point(x, y2 - step * i);
-                points.Add( center);
+                points.Add(center);
             }
             return points;
         }
@@ -61,17 +61,31 @@ namespace ProjectK.Games.LCR.Views
             return points;
         }
 
-        public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
+        public static List<Point> GetAxisXCenters(double x1, double x2, double y, int n, int delta)
         {
-            int delta = n > 10 ? n / 10 : 1;
             var step = (x2 - x1) / n;
             var points = new List<Point>();
             for (var i = 0; i <= n; i += delta)
             {
                 var center = new Point(x1 + step * i, y);
+                points.Add(center);
+            }
+            return points;
+        }
+
+        public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
+        {
+            int delta = n > 10 ? n / 10 : 1;
+            var centers = GetAxisXCenters(x1, x2, y, n, delta);
+            var step = (x2 - x1) / n;
+            var points = new List<Point>();
+            for (var centerIndex = 0; centerIndex < centers.Count; centerIndex++)
+            {
+                var center = centers[centerIndex];
                 var (top, bottom) = center.GetXPointLine(height);
                 points.AddRange(new[] { center, top, center, bottom, center });
-                canvas.DrawText(bottom.X - 5, bottom.Y + 10, i.ToString());
+                var axisIndex = centerIndex * delta;
+                canvas.DrawText(bottom.X - 5, bottom.Y + 10, axisIndex.ToString());
             }
             return points;
         }
