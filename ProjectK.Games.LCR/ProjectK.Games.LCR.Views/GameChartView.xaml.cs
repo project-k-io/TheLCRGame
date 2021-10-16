@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Globalization;
+using System.Security.Cryptography.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -53,7 +54,16 @@ namespace ProjectK.Games.LCR.Views
                 DrawShortest(rect, count);
                 DrawLongest(rect, count);
                 DrawGameNotation(rect);
+                DrawLabels(rect);
             }
+        }
+
+        private void DrawLabels((double x1, double y1, double x2, double y2) rect)
+        {
+            var point = new Point((rect.x2 - rect.x1) / 2, rect.y1);
+            canvas.DrawText(point, (0, 20), Brushes.Black, 28, "Games");
+            var point2 = new Point(rect.x1, (rect.y1 - rect.y2) / 2);
+            canvas.DrawText(point2, (-80, 0), Brushes.Black, 28, "Turns", 270);
         }
 
 

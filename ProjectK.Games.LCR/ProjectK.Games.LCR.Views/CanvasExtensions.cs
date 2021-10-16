@@ -31,18 +31,19 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Add(line);
         }
 
-        public static void DrawText(this Canvas canvas, Point point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text)
+        public static void DrawText(this Canvas canvas, Point point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text, double angle = 0)
         {
-            canvas.DrawText((point.X, point.Y), offset, brush, fontSize, text);
+            canvas.DrawText((point.X, point.Y), offset, brush, fontSize, text, angle);
         }
 
-        public static void DrawText(this Canvas canvas, (double x, double y) point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text)
+        public static void DrawText(this Canvas canvas, (double x, double y) point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text, double angle = 0)
         {
             var textBlock = new TextBlock
             {
                 Foreground = brush,
                 Text = text,
-                FontSize = fontSize
+                FontSize = fontSize,
+                LayoutTransform = new RotateTransform(angle)
             };
             Canvas.SetLeft(textBlock, point.x + offset.x);
             Canvas.SetTop(textBlock, point.y + offset.y);
