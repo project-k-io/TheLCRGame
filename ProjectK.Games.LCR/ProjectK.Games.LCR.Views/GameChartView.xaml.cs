@@ -43,31 +43,22 @@ namespace ProjectK.Games.LCR.Views
             var c = canvas;
             var offset = 50;
             var r = new Rect(offset, offset, c.ActualWidth - 2 * offset, c.ActualHeight - 2 * offset);
+            (double x1, double y1, double x2, double y2) rect = (r.X, r.Bottom, r.Width, r.Top);
             if (_simulator != null)
             {
-                var x1 = r.X;
-                var x2 = r.Width;
-                var y1 = r.Bottom;
-                var y2 = r.Top;
-
-                var xCount = _simulator.NumberOfGames;
-                var yCount = _simulator.NumberOfTurns;
-
-                DrawAxis(x1, y1, x2, y2, xCount, yCount);
-                DrawChart(x1, y1, x2, y2, xCount, yCount);
-                DrawAverage(x1, y1, x2, y2, yCount);
-
-                (double x1, double y1, double x2, double y2) rect = (x1, y1, x2, y2);
-                (int x, int y) count = (xCount, yCount);
+                (int x, int y) count = (_simulator.NumberOfGames, _simulator.NumberOfTurns);
+                DrawAxis(rect, count);
+                DrawChart(rect, count);
+                DrawAverage(rect, count.y);
                 DrawShortest(rect, count);
                 DrawLongest(rect, count);
             }
         }
 
-        void DrawAxis(double x1, double y1, double x2, double y2, int xCount, int yCount)
+        void DrawAxis((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var xAxis = canvas.GetAxisX(x1, x2, y1, xCount, 1);
-            var yAxis = canvas.GetAxisY(y1, y2, x1, yCount, 1);
+            var xAxis = canvas.GetAxisX(rect.x1, rect.x2, rect.y1, count.x, 1);
+            var yAxis = canvas.GetAxisY(rect.y1, rect.y2, rect.x1, count.y, 1);
             var points = new List<Point>();
             points.AddRange(yAxis);
             points.AddRange(xAxis);
@@ -75,10 +66,10 @@ namespace ProjectK.Games.LCR.Views
         }
 
 
-        void DrawChart(double x1, double y1, double x2, double y2, int xCount, int yCount)
+        void DrawChart((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var xCenters = CanvasExtensions.GetAxisCenters(x1, x2, xCount, 1);
-            var yCenters = CanvasExtensions.GetAxisCenters(y1, y2, yCount, 1);
+            var xCenters = CanvasExtensions.GetAxisCenters(rect.x1, rect.x2, count.x, 1);
+            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
             var games = _simulator.Games;
             var points = new List<Point>();
             foreach (var game in games)
@@ -90,13 +81,12 @@ namespace ProjectK.Games.LCR.Views
             }
             canvas.DrawLine(points, Colors.Red);
         }
-        void DrawAverage(double x1, double y1, double x2, double y2, int yCount)
+        void DrawAverage((double x1, double y1, double x2, double y2) rect, int yCount)
         {
-            var yCenters = CanvasExtensions.GetAxisCenters(y1, y2, yCount, 1);
-
+            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, yCount, 1);
             var y = yCenters[_simulator.AverageLengthGame];
-            var p1 = new Point(x1, y);
-            var p2 = new Point(x2, y);
+            var p1 = new Point(rect.x1, y);
+            var p2 = new Point(rect.x2, y);
             var points = new List<Point>();
             points.Add(p1);
             points.Add(p2);

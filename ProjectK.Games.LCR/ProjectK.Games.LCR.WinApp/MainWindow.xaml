@@ -7,7 +7,9 @@
         xmlns:viewModels="clr-namespace:ProjectK.Games.LCR.ViewModels;assembly=ProjectK.Games.LCR.ViewModels"
         xmlns:views="clr-namespace:ProjectK.Games.LCR.Views;assembly=ProjectK.Games.LCR.Views"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="{Binding Title}" Height="600" Width="800">
     <Window.DataContext>
         <local:AppViewModel/>
     </Window.DataContext>

@@ -6,9 +6,6 @@
              xmlns:local="clr-namespace:ProjectK.Games.LCR.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border BorderBrush="LightSkyBlue" BorderThickness="3">
-        <Canvas x:Name="canvas">
-
-        </Canvas>
-    </Border>
+    <Canvas x:Name="canvas">
+    </Canvas>
 </UserControl>
