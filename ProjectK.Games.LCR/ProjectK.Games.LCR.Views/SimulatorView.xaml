@@ -12,9 +12,9 @@
     </UserControl.Resources>
     <Grid d:DataContext="{StaticResource DesignViewModel}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="519*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" >
             <local:GameSettingsView ></local:GameSettingsView>

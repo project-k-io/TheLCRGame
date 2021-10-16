@@ -31,5 +31,12 @@ namespace ProjectK.Games.LCR.ViewModels
             }
             return sides;
         }
+
+        public void Reset()
+        {
+            NumberOfWins = 0;
+            NumberOfChips = MaxNumberOfChips;
+            Active = true;
+        }
     }
 }

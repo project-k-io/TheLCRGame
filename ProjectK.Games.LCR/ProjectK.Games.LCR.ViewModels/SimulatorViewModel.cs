@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -18,19 +19,19 @@ namespace ProjectK.Games.LCR.ViewModels
         private readonly List<PlayerViewModel> _players = new();
         private readonly List<GameViewModel> _games = new();
         private readonly Random _random = new();
-        private int _selectedPresetGameIndex;
         private int _numberOfPlayers;
         private int _numberOfGames;
-        private int _shortestLengthGameIndex = -1;
-        private int _longestLengthGameIndex = -1;
-        private int _averageLengthGame;
+        private int? _selectedPresetGameIndex;
+        private int? _shortestLengthGameIndex;
+        private int? _longestLengthGameIndex;
+        private int? _averageLengthGame;
 
 
         #endregion
 
         #region Properties
 
-        public int SelectedPresetGameIndex
+        public int? SelectedPresetGameIndex
         {
             get => _selectedPresetGameIndex;
             set => Set(ref _selectedPresetGameIndex, value);
@@ -40,22 +41,24 @@ namespace ProjectK.Games.LCR.ViewModels
             get => _numberOfPlayers;
             set => Set(ref _numberOfPlayers, value);
         }
+
         public int NumberOfGames
         {
             get => _numberOfGames;
             set => Set(ref _numberOfGames, value);
         }
-        public int ShortestLengthGameIndex
+
+        public int? ShortestLengthGameIndex
         {
             get => _shortestLengthGameIndex;
             set => Set(ref _shortestLengthGameIndex, value);
         }
-        public int LongestLengthGameIndex
+        public int? LongestLengthGameIndex
         {
             get => _longestLengthGameIndex;
             set => Set(ref _longestLengthGameIndex, value);
         }
-        public int AverageLengthGame
+        public int? AverageLengthGame
         {
             get => _averageLengthGame;
             set => Set(ref _averageLengthGame, value);
@@ -72,9 +75,35 @@ namespace ProjectK.Games.LCR.ViewModels
             new GameSettings { NumberOfPlayers = 7, NumberOfGames = 100 },
         };
 
-        public int NumberOfTurns { get; set;}
+        public int NumberOfTurns { get; set; }
         public List<PlayerViewModel> Players => _players;
         public List<GameViewModel> Games => _games;
+
+
+        public GameViewModel GetShortestLengthGame()
+        {
+            var games = Games;
+            if (games.Count == 0)
+                return null;
+
+            if (ShortestLengthGameIndex == null)
+                return null;
+
+            var game = games[ShortestLengthGameIndex.Value];
+            return game;
+        }
+        public GameViewModel GetLongestLengthGame()
+        {
+            var games = Games;
+            if (games.Count == 0)
+                return null;
+
+            if (LongestLengthGameIndex == null)
+                return null;
+
+            var game = games[LongestLengthGameIndex.Value];
+            return game;
+        }
 
         #endregion
 
@@ -82,52 +111,91 @@ namespace ProjectK.Games.LCR.ViewModels
 
         public ICommand PlayCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-        public ICommand SetGameCommand { get; set; }
 
         #endregion
 
         public SimulatorViewModel()
         {
             // Init 
-            SelectedPresetGameIndex = 0;
-            OnSetGame();
+            PropertyChanged += OnPropertyChanged;
 
             // Set Commands
             PlayCommand = new RelayCommand(OnPlay);
             CancelCommand = new RelayCommand(OnCancel);
-            SetGameCommand = new RelayCommand(OnSetGame);
+
+            // Update Settings
+            SelectedPresetGameIndex = 0;
         }
 
-        private void OnSetGame()
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var selectedGame = PresetGames[SelectedPresetGameIndex];
+            switch (e.PropertyName)
+            {
+                case nameof(SelectedPresetGameIndex):
+                    OnPresetChanged();
+                    break;
+                case nameof(NumberOfPlayers):
+                    CreatePlayers(NumberOfPlayers);
+                    break;
+                case nameof(NumberOfGames):
+                    CreateGames(NumberOfGames);
+                    break;
+            }
+        }
+
+        private void OnPresetChanged()
+        {
+            if (SelectedPresetGameIndex == null)
+                return;
+
+            var selectedGame = PresetGames[SelectedPresetGameIndex.Value];
             NumberOfPlayers = selectedGame.NumberOfPlayers;
             NumberOfGames = selectedGame.NumberOfGames;
+            ShortestLengthGameIndex = null;
+            LongestLengthGameIndex = null;
+            AverageLengthGame = null;
+            PlayFinished?.Invoke();
         }
+
         private void OnCancel()
         {
             throw new NotImplementedException();
         }
-
-        private void CreatePlayers()
+        private void CreateGames(int count)
         {
-            _players.Clear();
-            for (var i = 0; i < NumberOfPlayers; i++)
-            {
-                _players.Add(new PlayerViewModel { Index = i });
-            }
-        }
-
-        private void CreateGames()
-        {
+            Logger.LogDebug($"Create {count} games.");
             _games.Clear();
-            for (var i = 0; i < NumberOfGames; i++)
+            for (var i = 0; i < count; i++)
             {
                 _games.Add(new GameViewModel { Index = i });
             }
         }
 
-
+        private void CreatePlayers(int count)
+        {
+            Logger.LogDebug($"Create {count} players.");
+            _players.Clear();
+            for (var i = 0; i < count; i++)
+            {
+                _players.Add(new PlayerViewModel { Index = i });
+            }
+        }
+        private void ResetPlayers()
+        {
+            Logger.LogDebug("Reset players");
+            foreach (var player in _players)
+            {
+                player.Reset();
+            }
+        }
+        private void ResetGames()
+        {
+            Logger.LogDebug("Reset games");
+            foreach (var game in _games)
+            {
+                game.Reset();
+            }
+        }
 
         private void OnPlay()
         {
@@ -135,16 +203,15 @@ namespace ProjectK.Games.LCR.ViewModels
             Analyze();
             PlayFinished?.Invoke();
         }
-
         private void Play()
         {
             Logger.LogDebug($"Game Started");
             Logger.LogDebug($"Players={NumberOfPlayers}, Games={NumberOfGames}");
             var rnd = _random;
-            CreateGames();
+            ResetGames();
             foreach (var game in _games)
             {
-                CreatePlayers();
+                ResetPlayers();
                 bool onlyOnePlayerHasChips = false;
                 while (!onlyOnePlayerHasChips)
                 {
@@ -198,7 +265,6 @@ namespace ProjectK.Games.LCR.ViewModels
             }
             Logger.LogDebug($"Game Finished");
         }
-
         private void Analyze()
         {
             var shortestLengthTurns = int.MaxValue;

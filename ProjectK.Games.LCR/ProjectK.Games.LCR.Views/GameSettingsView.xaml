@@ -48,11 +48,6 @@
                   ItemsSource="{Binding Path=PresetGames}"
                   SelectedIndex="{Binding Path=SelectedPresetGameIndex}"
                   >
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="SelectionChanged">
-                    <b:InvokeCommandAction Command="{Binding Path=SetGameCommand}"></b:InvokeCommandAction>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
         </ComboBox>
         <!--Number Of Players-->
         <TextBlock Grid.Row="5" Grid.Column="1">Number Of Players</TextBlock>

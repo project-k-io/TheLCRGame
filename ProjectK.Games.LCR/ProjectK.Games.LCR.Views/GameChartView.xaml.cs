@@ -95,8 +95,11 @@ namespace ProjectK.Games.LCR.Views
         }
         void DrawAverage((double x1, double y1, double x2, double y2) rect, int yCount)
         {
+            if (_simulator.AverageLengthGame == null)
+                return;
+
             var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, yCount, 1);
-            var y = yCenters[_simulator.AverageLengthGame];
+            var y = yCenters[_simulator.AverageLengthGame.Value];
             var p1 = new Point(rect.x1, y);
             var p2 = new Point(rect.x2, y);
             var points = new List<Point>
@@ -110,11 +113,10 @@ namespace ProjectK.Games.LCR.Views
 
         void DrawShortest((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var games = _simulator.Games;
-            if (games.Count == 0)
+            var game = _simulator.GetShortestLengthGame();
+            if (game == null)
                 return;
 
-            var game = games[_simulator.ShortestLengthGameIndex];
             (int x, int y) index = (game.Index, game.Turns);
             var text = $"Shortest ({game.Turns})";
             canvas.DrawPointAndText(rect, count, index, (-10, 0), (-40, 20), text, Brushes.BlueViolet);
@@ -122,11 +124,10 @@ namespace ProjectK.Games.LCR.Views
         }
         void DrawLongest((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var games = _simulator.Games;
-            if (games.Count == 0)
+            var game = _simulator.GetLongestLengthGame();
+            if(game == null)
                 return;
 
-            var game = games[_simulator.LongestLengthGameIndex];
             (int x, int y) index = (game.Index, game.Turns);
             var text = $"Longest ({game.Turns})";
             canvas.DrawPointAndText(rect, count, index, (-10, -20), (-40, -60), text, Brushes.Gold);
