@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Text;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using ProjectK.Games.LCR.ViewModels;
@@ -17,7 +20,7 @@ namespace ProjectK.Games.LCR.Views
         public GameChartView()
         {
             InitializeComponent();
-            this.Loaded += OnLoaded;
+            Loaded += OnLoaded;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -53,6 +56,11 @@ namespace ProjectK.Games.LCR.Views
                 DrawAxis(x1, y1, x2, y2, xCount, yCount);
                 DrawChart(x1, y1, x2, y2, xCount, yCount);
                 DrawAverage(x1, y1, x2, y2, yCount);
+
+                (double x1, double y1, double x2, double y2) rect = (x1, y1, x2, y2);
+                (int x, int y) count = (xCount, yCount);
+                DrawShortest(rect, count);
+                DrawLongest(rect, count);
             }
         }
 
@@ -93,6 +101,32 @@ namespace ProjectK.Games.LCR.Views
             points.Add(p1);
             points.Add(p2);
             canvas.DrawLine(points, Colors.Green);
+        }
+
+
+        void DrawShortest((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
+        {
+            var games = _simulator.Games;
+            if(games.Count == 0)
+                return;
+
+            var game = games[_simulator.ShortestLengthGameIndex];
+            (int x, int y) index = (game.Index, game.Turns);
+            var text = $"Shortest ({game.Turns})";
+            canvas.DrawPointAndText(rect, count, index, (-10, 0), (-40, 20), text, Brushes.BlueViolet);
+
+        }
+        void DrawLongest((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
+        {
+            var games = _simulator.Games;
+            if (games.Count == 0)
+                return;
+
+            var game = games[_simulator.LongestLengthGameIndex];
+            (int x, int y) index = (game.Index, game.Turns);
+            var text = $"Longest ({game.Turns})";
+            canvas.DrawPointAndText(rect, count, index, (-10, -20), (-40, -60), text, Brushes.Gold);
+
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)

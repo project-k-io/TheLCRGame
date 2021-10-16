@@ -12,12 +12,12 @@ namespace ProjectK.Games.LCR.Views
 {
     public static class CanvasExtensions
     {
-        public static void DrawLine(this Canvas canvas, List<Point> points, System.Windows.Media.Color color)
+        public static void DrawLine(this Canvas canvas, List<Point> points, Color color)
         {
             canvas.DrawLine(points.ToArray(), color);
         }
 
-        public static void DrawLine(this Canvas canvas, Point[] points, System.Windows.Media.Color color)
+        public static void DrawLine(this Canvas canvas, Point[] points, Color color)
         {
             var line = new Polyline();
             var collection = new PointCollection();
@@ -97,6 +97,43 @@ namespace ProjectK.Games.LCR.Views
             var top = new Point(center.X, center.Y - height);
             var bottom = new Point(center.X, center.Y + height);
             return (top, bottom);
+        }
+        public static void DrawPointAndText(this Canvas canvas, 
+            (double x1, double y1, double x2, double y2) rect, 
+            (int x, int y) count, 
+            (int x, int y) index,
+            (int x, int y) pointOffset,
+            (int x, int y) textOffset,
+            string text,
+            SolidColorBrush brush
+            )
+        {
+            var xCenters = CanvasExtensions.GetAxisCenters(rect.x1, rect.x2,  count.x, 1);
+            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
+            (double x, double y) point = (xCenters[index.x], yCenters[index.y]);
+            var width = 10;
+            var ellipse = new Ellipse
+            {
+                Stroke = brush,
+                Fill = brush,
+                Width = width * 2,
+                Height = width * 2
+            };
+            Canvas.SetLeft(ellipse, point.x + pointOffset.x);
+            Canvas.SetTop(ellipse, point.y + pointOffset.y);
+            // Text
+            var textBlock = new TextBlock
+            {
+                Text = text,
+                FontStyle = FontStyles.Italic,
+                FontWeight = FontWeights.DemiBold,
+                Foreground = brush,
+                FontSize = 22
+            };
+            Canvas.SetLeft(textBlock, point.x + textOffset.x);
+            Canvas.SetTop(textBlock, point.y + textOffset.y);
+            canvas.Children.Add(ellipse);
+            canvas.Children.Add(textBlock);
         }
 
     }
