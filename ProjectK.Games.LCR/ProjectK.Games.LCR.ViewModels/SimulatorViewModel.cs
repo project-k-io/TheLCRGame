@@ -18,7 +18,7 @@ namespace ProjectK.Games.LCR.ViewModels
         #region Fields
 
         private readonly List<PlayerViewModel> _players = new();
-        private readonly List<GameViewModel> _games = new();
+        private readonly List<GameModel> _games = new();
         private readonly Random _random = new();
         private int _numberOfPlayers;
         private int _numberOfGames;
@@ -78,10 +78,10 @@ namespace ProjectK.Games.LCR.ViewModels
 
         public int NumberOfTurns { get; set; }
         public List<PlayerViewModel> Players => _players;
-        public List<GameViewModel> Games => _games;
+        public List<GameModel> Games => _games;
 
 
-        public GameViewModel GetShortestLengthGame()
+        public GameModel GetShortestLengthGame()
         {
             var games = Games;
             if (games.Count == 0)
@@ -93,7 +93,7 @@ namespace ProjectK.Games.LCR.ViewModels
             var game = games[ShortestLengthGameIndex.Value];
             return game;
         }
-        public GameViewModel GetLongestLengthGame()
+        public GameModel GetLongestLengthGame()
         {
             var games = Games;
             if (games.Count == 0)
@@ -168,7 +168,7 @@ namespace ProjectK.Games.LCR.ViewModels
             _games.Clear();
             for (var i = 0; i < count; i++)
             {
-                _games.Add(new GameViewModel { Index = i });
+                _games.Add(new GameModel { Index = i });
             }
         }
 
@@ -302,6 +302,23 @@ namespace ProjectK.Games.LCR.ViewModels
             Logger.LogDebug($"Longest=[Index={game2.Index}, Turns={game2.Turns}");
             Logger.LogDebug($"Average=[{AverageLengthGame}]");
         }
+
+
+        public List<(double x, double y)> DrawChart2((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
+        {
+            var xCenters = GenericExtensions.GetAxisCenters(rect.x1, rect.x2, count.x, 1);
+            var yCenters = GenericExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
+            var games = Games;
+            var points = new List<(double x, double y)>();
+            foreach (var game in games)
+            {
+                var x = xCenters[game.Index];
+                var y = yCenters[game.Turns];
+                points.Add((x, y));
+            }
+            return points;
+        }
+
     }
 }
 

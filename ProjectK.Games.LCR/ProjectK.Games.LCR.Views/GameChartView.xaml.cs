@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ProjectK.Games.LCR.Models;
 using ProjectK.Games.LCR.ViewModels;
 
 namespace ProjectK.Games.LCR.Views
@@ -90,25 +92,18 @@ namespace ProjectK.Games.LCR.Views
 
         void DrawChart((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var xCenters = CanvasExtensions.GetAxisCenters(rect.x1, rect.x2, count.x, 1);
-            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
             var games = _simulator.Games;
-            var points = new List<Point>();
-            foreach (var game in games)
-            {
-                var x = xCenters[game.Index];
-                var y = yCenters[game.Turns];
-                var point = new Point(x, y);
-                points.Add(point);
-            }
+            var drawPoints = games.GetPoints(rect, count);
+            var points = drawPoints.ToPoints();
             canvas.DrawLine(points, Colors.Red);
         }
+
         void DrawAverage((double x1, double y1, double x2, double y2) rect, int yCount)
         {
             if (_simulator.AverageLengthGame == null)
                 return;
 
-            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, yCount, 1);
+            var yCenters = GenericExtensions.GetAxisCenters(rect.y1, rect.y2, yCount, 1);
             var y = yCenters[_simulator.AverageLengthGame.Value];
             var p1 = new Point(rect.x1, y);
             var p2 = new Point(rect.x2, y);

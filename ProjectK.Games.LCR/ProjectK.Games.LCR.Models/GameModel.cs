@@ -1,9 +1,7 @@
-﻿using GalaSoft.MvvmLight;
-
-namespace ProjectK.Games.LCR.ViewModels
+﻿
+namespace ProjectK.Games.LCR.Models
 {
-
-    public class GameViewModel : ViewModelBase
+    public class GameModel: IPoint<int>
     {
         public const int NoWinner = -1;
         public int Turns { get; set; }
@@ -20,5 +18,8 @@ namespace ProjectK.Games.LCR.ViewModels
             Turns = 0;
             Winner = null;
         }
+
+        public int X => Index;
+        public int Y => Turns;
     }
 }

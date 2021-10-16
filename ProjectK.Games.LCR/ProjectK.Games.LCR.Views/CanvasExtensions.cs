@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ProjectK.Games.LCR.Models;
 
 namespace ProjectK.Games.LCR.Views
 {
@@ -50,22 +52,11 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Add(textBlock);
         }
 
-        public static List<double> GetAxisCenters(double n1, double n2, int n, int delta)
-        {
-            var step = (n2 - n1) / n;
-            var points = new List<double>();
-            for (var i = 0; i <= n; i += delta)
-            {
-                var center = n1 + step * i;
-                points.Add(center);
-            }
-            return points;
-        }
 
         public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var centers = GetAxisCenters(y1, y2, n, delta);
+            var centers = GenericExtensions.GetAxisCenters(y1, y2, n, delta);
             var axis = new List<Point>();
             for (var i = 0; i < centers.Count; i++)
             {
@@ -82,7 +73,7 @@ namespace ProjectK.Games.LCR.Views
         public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var centers = GetAxisCenters(x1, x2,  n, delta);
+            var centers = GenericExtensions.GetAxisCenters(x1, x2,  n, delta);
             var axis = new List<Point>();
             for (var i = 0; i < centers.Count; i++)
             {
@@ -119,8 +110,8 @@ namespace ProjectK.Games.LCR.Views
             SolidColorBrush brush
             )
         {
-            var xCenters = CanvasExtensions.GetAxisCenters(rect.x1, rect.x2,  count.x, 1);
-            var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
+            var xCenters = GenericExtensions.GetAxisCenters(rect.x1, rect.x2,  count.x, 1);
+            var yCenters = GenericExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
             var (x, y) = (xCenters[index.x], yCenters[index.y]);
             var width = 10;
             var ellipse = new Ellipse
@@ -145,6 +136,12 @@ namespace ProjectK.Games.LCR.Views
             Canvas.SetTop(textBlock, y + textOffset.y);
             canvas.Children.Add(ellipse);
             canvas.Children.Add(textBlock);
+        }
+
+        public static List<Point> ToPoints(this List<(double x, double y)> drawPoints)
+        {
+            var points = drawPoints.Select(p => new Point(p.x, p.y)).ToList();
+            return points;
         }
 
     }
