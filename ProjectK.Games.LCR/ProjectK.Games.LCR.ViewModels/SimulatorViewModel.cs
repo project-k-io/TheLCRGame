@@ -11,7 +11,8 @@ namespace ProjectK.Games.LCR.ViewModels
 {
     public class SimulatorViewModel : ViewModelBase
     {
-        public Action PlayFinished { get; set; }
+        public Action DrawAxes { get; set; }
+        public Action DrawCharts { get; set; }
 
 
         #region Fields
@@ -154,7 +155,7 @@ namespace ProjectK.Games.LCR.ViewModels
             ShortestLengthGameIndex = null;
             LongestLengthGameIndex = null;
             AverageLengthGame = null;
-            PlayFinished?.Invoke();
+            DrawAxes?.Invoke();
         }
 
         private void OnCancel()
@@ -201,7 +202,7 @@ namespace ProjectK.Games.LCR.ViewModels
         {
             Play();
             Analyze();
-            PlayFinished?.Invoke();
+            DrawCharts?.Invoke();
         }
         private void Play()
         {

@@ -29,18 +29,23 @@ namespace ProjectK.Games.LCR.Views
             if (DataContext is SimulatorViewModel model)
             {
                 _simulator = model;
-                _simulator.PlayFinished += PlayFinished;
+                _simulator.DrawAxes += OnDrawAxes;
+                _simulator.DrawCharts += OnDrawCharts;
                 Draw();
             }
 
         }
 
-        private void PlayFinished()
+        private void OnDrawAxes()
         {
             Draw();
         }
+        private void OnDrawCharts()
+        {
+            Draw(true);
+        }
 
-        private void Draw()
+        private void Draw(bool drawCharts = false)
         {
             canvas.Children.Clear();
             var c = canvas;
@@ -49,12 +54,15 @@ namespace ProjectK.Games.LCR.Views
             (double x1, double y1, double x2, double y2) rect = (r.X, r.Bottom, r.Width, r.Top);
             if (_simulator != null)
             {
-                (int x, int y) count = (_simulator.NumberOfGames, _simulator.NumberOfTurns);
+                (int x, int y) count = (_simulator.NumberOfGames, _simulator.NumberOfTurns + 10);
                 DrawAxis(rect, count);
-                DrawChart(rect, count);
-                DrawAverage(rect, count.y);
-                DrawShortest(rect, count);
-                DrawLongest(rect, count);
+                if (drawCharts)
+                {
+                    DrawChart(rect, count);
+                    DrawAverage(rect, count.y);
+                    DrawShortest(rect, count);
+                    DrawLongest(rect, count);
+                }
                 DrawGameNotation(rect);
                 DrawLabels(rect);
             }
