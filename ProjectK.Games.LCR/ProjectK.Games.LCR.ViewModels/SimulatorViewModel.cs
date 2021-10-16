@@ -164,7 +164,7 @@ namespace ProjectK.Games.LCR.ViewModels
         }
         private void CreateGames(int count)
         {
-            Logger.LogDebug($"Create {count} games.");
+            // Logger.LogDebug($"Create {count} games.");
             _games.Clear();
             for (var i = 0; i < count; i++)
             {
@@ -174,7 +174,7 @@ namespace ProjectK.Games.LCR.ViewModels
 
         private void CreatePlayers(int count)
         {
-            Logger.LogDebug($"Create {count} players.");
+            // Logger.LogDebug($"Create {count} players.");
             _players.Clear();
             for (var i = 0; i < count; i++)
             {
@@ -183,7 +183,7 @@ namespace ProjectK.Games.LCR.ViewModels
         }
         private void ResetPlayers()
         {
-            Logger.LogDebug("Reset players");
+            // Logger.LogDebug("Reset players");
             foreach (var player in _players)
             {
                 player.Reset();
@@ -191,20 +191,20 @@ namespace ProjectK.Games.LCR.ViewModels
         }
         private void ResetGames()
         {
-            Logger.LogDebug("Reset games");
+            // Logger.LogDebug("Reset games");
             foreach (var game in _games)
             {
                 game.Reset();
             }
         }
 
-        private void OnPlay()
+        public void OnPlay()
         {
             Play();
             Analyze();
             DrawCharts?.Invoke();
         }
-        private void Play()
+        public void Play()
         {
             Logger.LogDebug($"Game Started");
             Logger.LogDebug($"Players={NumberOfPlayers}, Games={NumberOfGames}");
@@ -262,11 +262,11 @@ namespace ProjectK.Games.LCR.ViewModels
                         }
                     }
                 }
-                Logger.LogDebug($"Game={game}");
+                // Logger.LogDebug($"Game={game}");
             }
             Logger.LogDebug($"Game Finished");
         }
-        private void Analyze()
+        public void Analyze()
         {
             var shortestLengthTurns = int.MaxValue;
             int shortestLengthGameIndex = 0;
