@@ -30,7 +30,9 @@ namespace ProjectK.Games.LCR.Views
             {
                 _simulator = model;
                 _simulator.PlayFinished += PlayFinished;
+                Draw();
             }
+
         }
 
         private void PlayFinished()
