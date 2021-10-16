@@ -15,9 +15,9 @@ namespace ProjectK.Games.LCR.ViewModels
 
         #region Fields
 
-        private readonly List<PlayerViewModel> _players = new List<PlayerViewModel>();
-        private readonly List<GameViewModel> _games = new List<GameViewModel>();
-        private readonly Random _random = new Random();
+        private readonly List<PlayerViewModel> _players = new();
+        private readonly List<GameViewModel> _games = new();
+        private readonly Random _random = new();
         private int _selectedPresetGameIndex;
         private int _numberOfPlayers;
         private int _numberOfGames;
@@ -63,13 +63,13 @@ namespace ProjectK.Games.LCR.ViewModels
 
         public List<GameSettings> PresetGames { get; set; } = new()
         {
-            new() { NumberOfPlayers = 3, NumberOfGames = 100 },
-            new() { NumberOfPlayers = 4, NumberOfGames = 100 },
-            new() { NumberOfPlayers = 5, NumberOfGames = 100 },
-            new() { NumberOfPlayers = 5, NumberOfGames = 1000 },
-            new() { NumberOfPlayers = 5, NumberOfGames = 10000 },
-            new() { NumberOfPlayers = 6, NumberOfGames = 100 },
-            new() { NumberOfPlayers = 7, NumberOfGames = 100 },
+            new GameSettings { NumberOfPlayers = 3, NumberOfGames = 100 },
+            new GameSettings { NumberOfPlayers = 4, NumberOfGames = 100 },
+            new GameSettings { NumberOfPlayers = 5, NumberOfGames = 100 },
+            new GameSettings { NumberOfPlayers = 5, NumberOfGames = 1000 },
+            new GameSettings { NumberOfPlayers = 5, NumberOfGames = 10000 },
+            new GameSettings { NumberOfPlayers = 6, NumberOfGames = 100 },
+            new GameSettings { NumberOfPlayers = 7, NumberOfGames = 100 },
         };
 
         public int NumberOfTurns { get; set;}

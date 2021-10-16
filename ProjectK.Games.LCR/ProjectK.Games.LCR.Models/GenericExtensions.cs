@@ -35,7 +35,7 @@ namespace ProjectK.Games.LCR.Models
             {
                 sb.Append(item);
                 if (!items.IsLast(item))
-                    sb.Append(",");
+                    sb.Append(',');
             }
 
             return sb.ToString();

@@ -121,7 +121,7 @@ namespace ProjectK.Games.LCR.Views
         {
             var xCenters = CanvasExtensions.GetAxisCenters(rect.x1, rect.x2,  count.x, 1);
             var yCenters = CanvasExtensions.GetAxisCenters(rect.y1, rect.y2, count.y, 1);
-            (double x, double y) point = (xCenters[index.x], yCenters[index.y]);
+            var (x, y) = (xCenters[index.x], yCenters[index.y]);
             var width = 10;
             var ellipse = new Ellipse
             {
@@ -130,8 +130,8 @@ namespace ProjectK.Games.LCR.Views
                 Width = width * 2,
                 Height = width * 2
             };
-            Canvas.SetLeft(ellipse, point.x + pointOffset.x);
-            Canvas.SetTop(ellipse, point.y + pointOffset.y);
+            Canvas.SetLeft(ellipse, x + pointOffset.x);
+            Canvas.SetTop(ellipse, y + pointOffset.y);
             // Text
             var textBlock = new TextBlock
             {
@@ -141,8 +141,8 @@ namespace ProjectK.Games.LCR.Views
                 Foreground = brush,
                 FontSize = 22
             };
-            Canvas.SetLeft(textBlock, point.x + textOffset.x);
-            Canvas.SetTop(textBlock, point.y + textOffset.y);
+            Canvas.SetLeft(textBlock, x + textOffset.x);
+            Canvas.SetTop(textBlock, y + textOffset.y);
             canvas.Children.Add(ellipse);
             canvas.Children.Add(textBlock);
         }
