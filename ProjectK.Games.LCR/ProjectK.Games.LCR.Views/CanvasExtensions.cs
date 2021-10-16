@@ -53,38 +53,48 @@ namespace ProjectK.Games.LCR.Views
         }
 
 
-        public static List<Point> GetAxisY(this Canvas canvas, double y1, double y2, double x, int n, int width)
+        public static (List<Point> points, List<(Point point, int index)> labels) GetAxisY(double y1, double y2, double x, int n, int width)
         {
             int delta = n > 10 ? n / 10 : 1;
             var centers = GenericExtensions.GetAxisCenters(y1, y2, n, delta);
             var axis = new List<Point>();
+            var labels = new List<(Point point, int index)>();
             for (var i = 0; i < centers.Count; i++)
             {
                 var y = centers[i];
                 var point = new Point(x, y);
-                var (left, right) = point.GetYPointLine(width);
-                axis.AddRange(new[] { point, left, point, right, point });
+                var (point1, point2) = point.GetYPointLine(width);
+                axis.AddRange(new[] { point, point1, point, point2, point });
                 var index = i * delta;
-                canvas.DrawText(left, (- 30, - 10), Brushes.Black,  14,  index.ToString());
+                labels.Add((point1, index));
             }
-            return axis;
+            return (axis, labels);
         }
 
-        public static List<Point> GetAxisX(this Canvas canvas, double x1, double x2, double y, int n, int height)
+        public static (List<Point> points, List<(Point point, int index)> labels)  GetAxisX(double x1, double x2, double y, int n, int height)
         {
             int delta = n > 10 ? n / 10 : 1;
-            var centers = GenericExtensions.GetAxisCenters(x1, x2,  n, delta);
+            var centers = GenericExtensions.GetAxisCenters(x1, x2, n, delta);
             var axis = new List<Point>();
+            var labels = new List<(Point point, int index)>();
             for (var i = 0; i < centers.Count; i++)
             {
                 var x = centers[i];
                 var point = new Point(x, y);
-                var (top, bottom) = point.GetXPointLine(height);
-                axis.AddRange(new[] { point, top, point, bottom, point });
+                var (point1, point2) = point.GetXPointLine(height);
+                axis.AddRange(new[] { point, point1, point, point2, point });
                 var index = i * delta;
-                canvas.DrawText(bottom, (-15, 10), Brushes.Black, 14,index.ToString());
+                labels.Add((point2, index));
             }
-            return axis;
+            return (axis, labels);
+        }
+
+        public static void DrawAxisLabels(this Canvas canvas, List<(Point point, int index)> labels, (int x, int y) offset)
+        {
+            foreach (var (point, index) in labels)
+            {
+                canvas.DrawText(point, offset, Brushes.Black, 14, index.ToString());
+            }
         }
 
         public static (Point left, Point right) GetYPointLine(this Point center, int width)

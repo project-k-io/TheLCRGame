@@ -78,17 +78,15 @@ namespace ProjectK.Games.LCR.Views
             canvas.DrawText(point2, (-80, 0), Brushes.Black, 28, "Turns", 270);
         }
 
-
         void DrawAxis((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
-            var xAxis = canvas.GetAxisX(rect.x1, rect.x2, rect.y1, count.x, 1);
-            var yAxis = canvas.GetAxisY(rect.y1, rect.y2, rect.x1, count.y, 1);
-            var points = new List<Point>();
-            points.AddRange(yAxis);
-            points.AddRange(xAxis);
-            canvas.DrawLine(points, Colors.Black);
+            var (xPoints, xLabels) = CanvasExtensions.GetAxisX(rect.x1, rect.x2, rect.y1, count.x, 1);
+            var (yPoints, yLabels) = CanvasExtensions.GetAxisY(rect.y1, rect.y2, rect.x1, count.y, 1);
+            canvas.DrawLine(xPoints, Colors.Black);
+            canvas.DrawAxisLabels(xLabels, (-15, 10));
+            canvas.DrawLine(yPoints, Colors.Black);
+            canvas.DrawAxisLabels(yLabels, (-30, -10));
         }
-
 
         void DrawChart((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
