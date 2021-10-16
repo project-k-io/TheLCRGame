@@ -41,7 +41,7 @@ namespace ProjectK.Games.LCR.Views
         {
             canvas.Children.Clear();
             var c = canvas;
-            var offset = 50;
+            var offset = 100;
             var r = new Rect(offset, offset, c.ActualWidth - 2 * offset, c.ActualHeight - 2 * offset);
             (double x1, double y1, double x2, double y2) rect = (r.X, r.Bottom, r.Width, r.Top);
             if (_simulator != null)
@@ -52,8 +52,10 @@ namespace ProjectK.Games.LCR.Views
                 DrawAverage(rect, count.y);
                 DrawShortest(rect, count);
                 DrawLongest(rect, count);
+                DrawGameNotation(rect);
             }
         }
+
 
         void DrawAxis((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
@@ -87,9 +89,11 @@ namespace ProjectK.Games.LCR.Views
             var y = yCenters[_simulator.AverageLengthGame];
             var p1 = new Point(rect.x1, y);
             var p2 = new Point(rect.x2, y);
-            var points = new List<Point>();
-            points.Add(p1);
-            points.Add(p2);
+            var points = new List<Point>
+            {
+                p1,
+                p2
+            };
             canvas.DrawLine(points, Colors.Green);
         }
 
@@ -97,7 +101,7 @@ namespace ProjectK.Games.LCR.Views
         void DrawShortest((double x1, double y1, double x2, double y2) rect, (int x, int y) count)
         {
             var games = _simulator.Games;
-            if(games.Count == 0)
+            if (games.Count == 0)
                 return;
 
             var game = games[_simulator.ShortestLengthGameIndex];
@@ -117,6 +121,20 @@ namespace ProjectK.Games.LCR.Views
             var text = $"Longest ({game.Turns})";
             canvas.DrawPointAndText(rect, count, index, (-10, -20), (-40, -60), text, Brushes.Gold);
 
+        }
+        private void DrawGameNotation((double x1, double y1, double x2, double y2) rect)
+        {
+            var p1 = new Point(rect.x2 - 100, rect.y2 - 20);
+            var p2 = new Point(p1.X + 50, p1.Y);
+            var points = new List<Point>() { p1, p2 };
+            canvas.DrawLine(points, Colors.Red);
+            canvas.DrawText(p2, (10, -20), Brushes.Black, 22, "Game");
+
+            var p3 = new Point(p1.X, p1.Y + 40);
+            var p4 = new Point(p2.X, p2.Y + 40);
+            var points2 = new List<Point>() { p3, p4 };
+            canvas.DrawLine(points2, Colors.Green);
+            canvas.DrawText(p4, (10, -20), Brushes.Black, 22, "Average");
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)

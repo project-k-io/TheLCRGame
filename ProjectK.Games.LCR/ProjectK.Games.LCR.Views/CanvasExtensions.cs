@@ -31,11 +31,21 @@ namespace ProjectK.Games.LCR.Views
             canvas.Children.Add(line);
         }
 
-        public static void DrawText(this Canvas canvas, double x, double y, string text)
+        public static void DrawText(this Canvas canvas, Point point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text)
         {
-            var textBlock = new TextBlock { Text = text };
-            Canvas.SetLeft(textBlock, x);
-            Canvas.SetTop(textBlock, y);
+            canvas.DrawText((point.X, point.Y), offset, brush, fontSize, text);
+        }
+
+        public static void DrawText(this Canvas canvas, (double x, double y) point, (int x, int y) offset, SolidColorBrush brush, double fontSize, string text)
+        {
+            var textBlock = new TextBlock
+            {
+                Foreground = brush,
+                Text = text,
+                FontSize = fontSize
+            };
+            Canvas.SetLeft(textBlock, point.x + offset.x);
+            Canvas.SetTop(textBlock, point.y + offset.y);
             canvas.Children.Add(textBlock);
         }
 
@@ -63,7 +73,7 @@ namespace ProjectK.Games.LCR.Views
                 var (left, right) = point.GetYPointLine(width);
                 axis.AddRange(new[] { point, left, point, right, point });
                 var index = i * delta;
-                canvas.DrawText(left.X - 30, left.Y - 10, index.ToString());
+                canvas.DrawText(left, (- 30, - 10), Brushes.Black,  14,  index.ToString());
             }
             return axis;
         }
@@ -80,7 +90,7 @@ namespace ProjectK.Games.LCR.Views
                 var (top, bottom) = point.GetXPointLine(height);
                 axis.AddRange(new[] { point, top, point, bottom, point });
                 var index = i * delta;
-                canvas.DrawText(bottom.X - 15, bottom.Y + 10, index.ToString());
+                canvas.DrawText(bottom, (-15, 10), Brushes.Black, 14,index.ToString());
             }
             return axis;
         }
