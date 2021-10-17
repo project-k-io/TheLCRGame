@@ -8,11 +8,36 @@ namespace ProjectK.Games.LCR.ViewModels
     public class PlayerViewModel: ViewModelBase
     {
         public const int MaxNumberOfChips = 3;
+        #region Fields
 
-        public int Index { get; set; }
+        private int _index;
+        private bool _winner;
+        private int _numberOfWins;
+
+        #endregion
+
+        #region Properties
         public int NumberOfChips { get; set; } = MaxNumberOfChips;
         public bool Active { get; set; } = true;
-        public int NumberOfWins { get; set; }
+
+        public int Index
+        {
+            get => _index;
+            set => Set(ref _index, value);
+        }
+        public bool Winner
+        {
+            get => _winner;
+            set => Set(ref _winner, value);
+        }
+        public int NumberOfWins
+        {
+            get => _numberOfWins;
+            set => Set(ref _numberOfWins, value);
+        }
+        #endregion
+
+
 
         public override string ToString()
         {
@@ -34,9 +59,9 @@ namespace ProjectK.Games.LCR.ViewModels
 
         public void Reset()
         {
-            NumberOfWins = 0;
             NumberOfChips = MaxNumberOfChips;
             Active = true;
+            Winner = false;
         }
     }
 }

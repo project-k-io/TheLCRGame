@@ -189,6 +189,15 @@ namespace ProjectK.Games.LCR.ViewModels
                 player.Reset();
             }
         }
+        private void ResetNumberOfWins()
+        {
+            // Logger.LogDebug("Reset players");
+            foreach (var player in _players)
+            {
+                player.NumberOfWins = 0;
+            }
+        }
+
         private void ResetGames()
         {
             // Logger.LogDebug("Reset games");
@@ -210,6 +219,7 @@ namespace ProjectK.Games.LCR.ViewModels
             Logger.LogDebug($"Players={NumberOfPlayers}, Games={NumberOfGames}");
             var rnd = _random;
             ResetGames();
+            ResetNumberOfWins();
             foreach (var game in _games)
             {
                 ResetPlayers();
@@ -291,6 +301,25 @@ namespace ProjectK.Games.LCR.ViewModels
                     longestLengthGameIndex = game.Index;
                 }
             }
+
+            // Find winner
+            PlayerViewModel winner = null;
+            foreach (var player in Players)
+            {
+                if (winner == null)
+                {
+                    winner = player;
+                    continue;
+                }
+                
+                if (player.NumberOfWins > winner.NumberOfWins)
+                {
+                    winner = player;
+                }
+            }
+
+            if (winner != null)
+                winner.Winner = true;
 
             NumberOfTurns = longestLengthTurns;
             ShortestLengthGameIndex = shortestLengthGameIndex;

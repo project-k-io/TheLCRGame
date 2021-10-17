@@ -7,16 +7,43 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <viewModels:PlayerViewModel x:Key="DesignViewModel" NumberOfWins="30">
+        <viewModels:PlayerViewModel x:Key="DesignViewModel" NumberOfWins="30" Index="3" Winner="True">
 
         </viewModels:PlayerViewModel>
     </UserControl.Resources>
     <Grid d:DataContext="{StaticResource DesignViewModel}">
-        <Border BorderThickness="2" BorderBrush="CadetBlue" Margin="2" Width="300"  Height="300">
-            <StackPanel>
-                <TextBlock Text="{Binding Path=Index}" HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding Path=NumberOfWins}" HorizontalAlignment="Center"/>
-                <Path Stroke="Black" StrokeThickness="5"  Fill="Coral"  Width="200" Height="200">
+        <StackPanel>
+            <TextBlock FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Ink Free" >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Winner}" Value="True">
+                                <Setter Property="Text" Value="Winner"></Setter>
+                                <Setter Property="Foreground" Value="Coral"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Winner}" Value="False">
+                                <Setter Property="Text" Value=""></Setter>
+                                <Setter Property="Foreground" Value="White"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+
+            </TextBlock>
+            <Grid>
+                <Path Stroke="Black" StrokeThickness="5"  Width="200" Height="200">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Winner}" Value="True">
+                                    <Setter Property="Path.Fill" Value="Coral"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Winner}" Value="False">
+                                    <Setter Property="Path.Fill" Value="White"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
                     <Path.Data>
                         <CombinedGeometry  >
                             <CombinedGeometry.Geometry1>
@@ -56,8 +83,12 @@
                         </CombinedGeometry>
                     </Path.Data>
                 </Path>
-            </StackPanel>
-        </Border>
-
+                <TextBlock Text="{Binding Path=NumberOfWins}" FontSize="56" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="0" ToolTip="Number of wins"/>
+            </Grid>
+            <Grid>
+                <Ellipse Width="70" Height="70" Margin="5" Stroke="Black" StrokeThickness="3"  />
+                <TextBlock Text="{Binding Path=Index}" FontSize="48" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </UserControl>

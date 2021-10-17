@@ -24,7 +24,9 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate DataType="viewModels:PlayerViewModel">
-                    <local:PlayerView/>
+                    <Viewbox StretchDirection="Both" Stretch="Uniform">
+                        <local:PlayerView/>
+                    </Viewbox>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
