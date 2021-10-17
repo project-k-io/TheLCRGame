@@ -41,10 +41,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
-            <local:GameChartView Grid.Row="0">
-            </local:GameChartView>
+            <local:GameChartView Grid.Row="0"/>
+            <local:WinnerListView Grid.Row="1"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ProjectK.Games.LCR.Views"
+             xmlns:viewModels="clr-namespace:ProjectK.Games.LCR.ViewModels;assembly=ProjectK.Games.LCR.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <viewModels:SimulatorViewModel x:Key="DesignViewModel"/>
+    </UserControl.Resources>
+    <Grid d:DataContext="{StaticResource DesignViewModel}">
         <ListView 
             ItemsSource="{Binding Players}"
             HorizontalAlignment="Center"
@@ -18,6 +22,27 @@
                     <StackPanel Background="Transparent" Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="viewModels:PlayerViewModel">
+                    <Border BorderThickness="2" BorderBrush="CadetBlue" Margin="2" Width="300"  Height="300">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Index}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=NumberOfWins}" HorizontalAlignment="Center"/>
+                            <Path Fill="Coral"  Width="200" Height="200">
+                                <Path.Data>
+                                    <GeometryGroup FillRule="Nonzero" >
+                                        <EllipseGeometry  Center="100, 60" RadiusX="40" RadiusY="40"/>
+                                        <RectangleGeometry Rect="30,160 140,40" />
+                                        <RectangleGeometry Rect="80,90 40,40" />
+                                        <EllipseGeometry  Center="80, 160" RadiusX="50" RadiusY="50"/>
+                                        <EllipseGeometry  Center="120, 160" RadiusX="50" RadiusY="50"/>
+                                    </GeometryGroup>
+                                </Path.Data>
+                            </Path>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </UserControl>
