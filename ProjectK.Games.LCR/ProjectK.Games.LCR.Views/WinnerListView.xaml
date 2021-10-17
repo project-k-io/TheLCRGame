@@ -11,7 +11,8 @@
         <viewModels:SimulatorViewModel x:Key="DesignViewModel"/>
     </UserControl.Resources>
     <Grid d:DataContext="{StaticResource DesignViewModel}">
-        <ListView 
+        <ListView x:Name="PlayerList"
+            SelectedIndex="{Binding SelectedPlayerIndex }"
             ItemsSource="{Binding Players}"
             HorizontalAlignment="Center"
             ScrollViewer.VerticalScrollBarVisibility="Disabled" 

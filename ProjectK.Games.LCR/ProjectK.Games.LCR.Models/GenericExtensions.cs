@@ -6,6 +6,11 @@ namespace ProjectK.Games.LCR.Models
 {
     public static class GenericExtensions
     {
+        public static bool IsNullOrEmpty<T>(this IList<T> items)
+        {
+            return items == null || items.Count == 0;
+        }
+
         public static int GetNextItemIndex2<T>(this IList<T> items, int index)
         {
             return index > 0 ? index - 1 : items.Count - 1;

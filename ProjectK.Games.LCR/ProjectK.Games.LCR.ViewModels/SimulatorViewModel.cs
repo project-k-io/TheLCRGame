@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -17,7 +18,7 @@ namespace ProjectK.Games.LCR.ViewModels
 
         #region Fields
 
-        private readonly List<PlayerViewModel> _players = new();
+        private readonly ObservableCollection<PlayerViewModel> _players = new();
         private readonly List<GameModel> _games = new();
         private readonly Random _random = new();
         private int _numberOfPlayers;
@@ -26,7 +27,7 @@ namespace ProjectK.Games.LCR.ViewModels
         private int? _shortestLengthGameIndex;
         private int? _longestLengthGameIndex;
         private int? _averageLengthGame;
-
+        private int _selectedPlayerIndex;
 
         #endregion
 
@@ -64,6 +65,11 @@ namespace ProjectK.Games.LCR.ViewModels
             get => _averageLengthGame;
             set => Set(ref _averageLengthGame, value);
         }
+        public int SelectedPlayerIndex
+        {
+            get => _selectedPlayerIndex;
+            set => Set(ref _selectedPlayerIndex, value);
+        }
 
         public List<GameSettings> PresetGames { get; set; } = new()
         {
@@ -77,7 +83,7 @@ namespace ProjectK.Games.LCR.ViewModels
         };
 
         public int NumberOfTurns { get; set; }
-        public List<PlayerViewModel> Players => _players;
+        public ObservableCollection<PlayerViewModel> Players => _players;
         public List<GameModel> Games => _games;
 
 
@@ -134,12 +140,15 @@ namespace ProjectK.Games.LCR.ViewModels
             {
                 case nameof(SelectedPresetGameIndex):
                     OnPresetChanged();
+                    OnPlay();
                     break;
                 case nameof(NumberOfPlayers):
                     CreatePlayers(NumberOfPlayers);
+                    OnPlay();
                     break;
                 case nameof(NumberOfGames):
                     CreateGames(NumberOfGames);
+                    OnPlay();
                     break;
             }
         }
@@ -319,17 +328,18 @@ namespace ProjectK.Games.LCR.ViewModels
             }
 
             if (winner != null)
+            {
                 winner.Winner = true;
+                SelectedPlayerIndex = winner.Index;
+            }
 
             NumberOfTurns = longestLengthTurns;
             ShortestLengthGameIndex = shortestLengthGameIndex;
             LongestLengthGameIndex = longestLengthGameIndex;
-            AverageLengthGame = totalTurnsLength / _games.Count;
-            var game1 = _games[shortestLengthGameIndex];
-            Logger.LogDebug($"Shortest=[Index={game1.Index}, Turns={game1.Turns}");
-            var game2 = _games[longestLengthGameIndex];
-            Logger.LogDebug($"Longest=[Index={game2.Index}, Turns={game2.Turns}");
-            Logger.LogDebug($"Average=[{AverageLengthGame}]");
+            if (!_games.IsNullOrEmpty())
+            {
+                AverageLengthGame = totalTurnsLength / _games.Count;
+            }
         }
 
 
