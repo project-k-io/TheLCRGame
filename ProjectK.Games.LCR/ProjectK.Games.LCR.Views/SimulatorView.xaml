@@ -39,8 +39,8 @@
         <GridSplitter Grid.Column="1" Width="5" Background="LightGray" Margin="0,10, 0, 10" />
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="1*"/>
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <local:GameChartView Grid.Row="0"/>

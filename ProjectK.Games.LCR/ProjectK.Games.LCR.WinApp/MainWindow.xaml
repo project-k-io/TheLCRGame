@@ -14,40 +14,6 @@
         <local:AppViewModel/>
     </Window.DataContext>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" >
-            <views:GameSettingsView ></views:GameSettingsView>
-            <!--Buttons-->
-            <Grid >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="5"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="5"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=PlayCommand}">Play</Button>
-                <Button Grid.Row="1" Grid.Column="3" Command="{Binding Path=CancelCommand}">Cancel</Button>
-            </Grid>
-        </StackPanel>
-        <GridSplitter Grid.Column="1" Width="5" Background="LightGray" Margin="0,10, 0, 10" />
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
-            <views:GameChartView Grid.Row="0"/>
-            <views:WinnerListView Grid.Row="1"/>
-        </Grid>
+        <views:SimulatorView/>
     </Grid>
 </Window>
