@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="ProjectK.Games.LCR.Views.PlayerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:ProjectK.Games.LCR.ViewModels;assembly=ProjectK.Games.LCR.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <viewModels:PlayerViewModel x:Key="DesignViewModel" NumberOfWins="30" Index="3" Winner="True">
+
+        </viewModels:PlayerViewModel>
+    </UserControl.Resources>
+    <Grid d:DataContext="{StaticResource DesignViewModel}">
+        <StackPanel>
+            <TextBlock FontSize="48" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Ink Free" >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Winner}" Value="True">
+                                <Setter Property="Text" Value="Winner"></Setter>
+                                <Setter Property="Foreground" Value="Coral"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Winner}" Value="False">
+                                <Setter Property="Text" Value=""></Setter>
+                                <Setter Property="Foreground" Value="White"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+
+            </TextBlock>
+            <Grid>
+                <Path Stroke="Black" StrokeThickness="5"  Width="200" Height="200">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Winner}" Value="True">
+                                    <Setter Property="Path.Fill" Value="Coral"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Winner}" Value="False">
+                                    <Setter Property="Path.Fill" Value="White"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Path.Style>
+                    <Path.Data>
+                        <CombinedGeometry  >
+                            <CombinedGeometry.Geometry1>
+                                <GeometryGroup/>
+                            </CombinedGeometry.Geometry1>
+                            <CombinedGeometry.Geometry2>
+                                <GeometryGroup FillRule="Nonzero" >
+                                    <PathGeometry>
+                                        <PathGeometry.Figures>
+                                            <PathFigureCollection>
+                                                <PathFigure StartPoint="180,200">
+                                                    <PathFigure.Segments>
+                                                        <PathSegmentCollection>
+                                                            <!--Left Side-->
+                                                            <LineSegment Point="20,200"></LineSegment>
+                                                            <LineSegment Point="20,150"></LineSegment>
+                                                            <!--Left Shoulder-->
+                                                            <BezierSegment Point1="20,150" Point2="20,110" Point3="80,110"/>
+                                                            <!--Left Neck-->
+                                                            <LineSegment Point="80,90"></LineSegment>
+                                                            <!--Head-->
+                                                            <BezierSegment Point1="80,90" Point2="50,70" Point3="70,40"/>
+                                                            <BezierSegment Point1="70,40" Point2="100,10" Point3="130,40"/>
+                                                            <BezierSegment Point1="130,40" Point2="150,70" Point3="120,90"/>
+                                                            <!--Right Neck-->
+                                                            <LineSegment Point="120,110"></LineSegment>
+                                                            <!--Right Shoulder-->
+                                                            <BezierSegment Point1="120,110" Point2="180,110" Point3="180,150"/>
+                                                        </PathSegmentCollection>
+                                                    </PathFigure.Segments>
+                                                </PathFigure>
+                                            </PathFigureCollection>
+                                        </PathGeometry.Figures>
+                                    </PathGeometry>
+                                </GeometryGroup>
+                            </CombinedGeometry.Geometry2>
+                        </CombinedGeometry>
+                    </Path.Data>
+                </Path>
+                <TextBlock Text="{Binding Path=NumberOfWins}" FontSize="56" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="0" ToolTip="Number of wins"/>
+            </Grid>
+            <Grid>
+                <Ellipse Width="70" Height="70" Margin="5" Stroke="Black" StrokeThickness="3"  />
+                <TextBlock Text="{Binding Path=Index}" FontSize="48" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

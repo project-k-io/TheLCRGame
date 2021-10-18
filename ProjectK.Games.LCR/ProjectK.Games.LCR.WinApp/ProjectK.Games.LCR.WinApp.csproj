@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectK.Games.LCR.ViewModels\ProjectK.Games.LCR.ViewModels.csproj" />
+    <ProjectReference Include="..\ProjectK.Games.LCR.Views\ProjectK.Games.LCR.Views.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="ProjectK.Games.LCR.Views.SimulatorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProjectK.Games.LCR.Views"
+             xmlns:viewModels="clr-namespace:ProjectK.Games.LCR.ViewModels;assembly=ProjectK.Games.LCR.ViewModels"
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System.ComponentModel.TypeConverter"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <viewModels:SimulatorViewModel x:Key="DesignViewModel"/>
+        <local:InverseBooleanConverter x:Key="Inverter"/>
+    </UserControl.Resources>
+    <Grid d:DataContext="{StaticResource DesignViewModel}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" >
+            <local:GameSettingsView IsEnabled="{Binding Path=IsRunning, Converter={StaticResource Inverter}, IsAsync=True}" ></local:GameSettingsView>
+            <!--Buttons-->
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=PlayCommand}" 
+                        IsEnabled="{Binding Path=IsRunning, Converter={StaticResource Inverter}, IsAsync=True}"
+                        >Play</Button>
+
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding Path=CancelCommand}"
+                        IsEnabled="{Binding Path=IsRunning, IsAsync=True}"
+                        >Cancel</Button>
+            </Grid>
+        </StackPanel>
+        <GridSplitter Grid.Column="1" Width="5" Background="LightGray" Margin="0,10, 0, 10" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <local:GameChartView Grid.Row="0"/>
+            <local:WinnerListView Grid.Row="1"/>
+        </Grid>
+    </Grid>
+</UserControl>
