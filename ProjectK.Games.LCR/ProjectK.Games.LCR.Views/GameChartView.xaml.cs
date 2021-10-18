@@ -25,6 +25,7 @@ namespace ProjectK.Games.LCR.Views
             if (DataContext is SimulatorViewModel model)
             {
                 _simulator = model;
+                _simulator.Dispatcher = a => Dispatcher.BeginInvoke(a);
                 _simulator.DrawAxes += OnDrawAxes;
                 _simulator.DrawCharts += OnDrawCharts;
                 _simulator.OnPlay();

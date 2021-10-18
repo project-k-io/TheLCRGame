@@ -14,6 +14,7 @@ namespace ProjectK.Games.LCR.ViewModels
     {
         public Action DrawAxes { get; set; }
         public Action DrawCharts { get; set; }
+        public Action<Action> Dispatcher { get; set; }
 
 
         #region Fields
