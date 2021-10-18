@@ -33,11 +33,7 @@ namespace ProjectK.Games.LCR.Views
                 _simulator = model;
                 _simulator.DrawAxes += OnDrawAxes;
                 _simulator.DrawCharts += OnDrawCharts;
-                // Play
-                _simulator.Play();
-                _simulator.Analyze();
-                // Draw
-                OnDrawCharts();
+                _simulator.OnPlay();
             }
         }
 
