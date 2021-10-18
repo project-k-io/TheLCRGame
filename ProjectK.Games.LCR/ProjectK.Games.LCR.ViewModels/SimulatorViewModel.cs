@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -30,6 +31,7 @@ namespace ProjectK.Games.LCR.ViewModels
         private int? _longestLengthGameIndex;
         private int? _averageLengthGame;
         private int _selectedPlayerIndex;
+        private bool _isRunning = false;
 
         #endregion
 
@@ -88,6 +90,21 @@ namespace ProjectK.Games.LCR.ViewModels
         public ObservableCollection<PlayerViewModel> Players => _players;
         public List<GameModel> Games => _games;
 
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => Set(ref _isRunning, value);
+        }
+
+
+        #endregion
+
+        #region Commands
+
+        public ICommand PlayCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
+
+        #endregion
 
         public GameModel GetShortestLengthGame()
         {
@@ -101,6 +118,7 @@ namespace ProjectK.Games.LCR.ViewModels
             var game = games[ShortestLengthGameIndex.Value];
             return game;
         }
+
         public GameModel GetLongestLengthGame()
         {
             var games = Games;
@@ -113,15 +131,6 @@ namespace ProjectK.Games.LCR.ViewModels
             var game = games[LongestLengthGameIndex.Value];
             return game;
         }
-
-        #endregion
-
-        #region Commands
-
-        public ICommand PlayCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
-
-        #endregion
 
         public SimulatorViewModel()
         {
@@ -169,10 +178,6 @@ namespace ProjectK.Games.LCR.ViewModels
             DrawAxes?.Invoke();
         }
 
-        private void OnCancel()
-        {
-            throw new NotImplementedException();
-        }
         private void CreateGames(int count)
         {
             // Logger.LogDebug($"Create {count} games.");
@@ -222,10 +227,17 @@ namespace ProjectK.Games.LCR.ViewModels
 
         public async Task OnPlay()
         {
+            IsRunning = true;
             await Play();
             Analyze();
             DrawCharts?.Invoke();
+            IsRunning = false;
         }
+        private void OnCancel()
+        {
+            IsRunning = false;
+        }
+
 
         public async Task Play()
         {
@@ -242,6 +254,9 @@ namespace ProjectK.Games.LCR.ViewModels
                 {
                     foreach (var player in _players)
                     {
+                        if(!IsRunning)
+                            return;
+
                         game.Turns++;
                         var finished = await Task.Run(() => Play(player, rnd));
                         if (finished)
