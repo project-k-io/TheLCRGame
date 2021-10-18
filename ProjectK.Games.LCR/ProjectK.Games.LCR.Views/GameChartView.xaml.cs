@@ -1,13 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using ProjectK.Games.LCR.Models;
 using ProjectK.Games.LCR.ViewModels;
 
