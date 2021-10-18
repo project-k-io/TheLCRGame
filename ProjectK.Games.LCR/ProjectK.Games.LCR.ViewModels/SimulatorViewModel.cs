@@ -239,46 +239,11 @@ namespace ProjectK.Games.LCR.ViewModels
                     foreach (var player in _players)
                     {
                         game.Turns++;
-                        // if player doesn't have chips and it's his play, he is out  
-                        if (player.NumberOfChips == 0)
-                            player.Active = false;
-
-                        // check if we have only one active player
-                        var activePlayers = _players.Where(item => item.Active).ToList();
-                        if (activePlayers.Count == 1)
+                        if (Play(player, rnd))
                         {
-                            activePlayers[0].NumberOfWins++;
                             game.Winner = player.Index;
                             onlyOnePlayerHasChips = true;
                             break;
-                        }
-                        // skip not active players
-                        if (!player.Active)
-                            continue;
-
-                        var activePlayerIndex = activePlayers.IndexOf(player);
-                        var leftPlayer = activePlayers.GetNextItem(activePlayerIndex);
-                        var rightPlayer = activePlayers.GetPrevItem(activePlayerIndex);
-
-                        var sides = player.Roll(rnd);
-                        foreach (var side in sides)
-                        {
-                            switch (side)
-                            {
-                                case DiceSide.Dot:
-                                    break;
-                                case DiceSide.Left:
-                                    leftPlayer.NumberOfChips++;
-                                    player.NumberOfChips--;
-                                    break;
-                                case DiceSide.Right:
-                                    rightPlayer.NumberOfChips++;
-                                    player.NumberOfChips--;
-                                    break;
-                                case DiceSide.Center:
-                                    player.NumberOfChips--;
-                                    break;
-                            }
                         }
                     }
                 }
@@ -286,6 +251,53 @@ namespace ProjectK.Games.LCR.ViewModels
             }
             Logger.LogDebug($"Game Finished");
         }
+
+        private bool Play(PlayerViewModel player, Random rnd)
+        {
+            // if player doesn't have chips and it's his play, he is out  
+            if (player.NumberOfChips == 0)
+                player.Active = false;
+
+            // check if we have only one active player
+            var activePlayers = _players.Where(item => item.Active).ToList();
+            if (activePlayers.Count == 1)
+            {
+                activePlayers[0].NumberOfWins++;
+                return true;
+            }
+
+            // skip not active players
+            if (!player.Active)
+                return false;
+
+            var activePlayerIndex = activePlayers.IndexOf(player);
+            var leftPlayer = activePlayers.GetNextItem(activePlayerIndex);
+            var rightPlayer = activePlayers.GetPrevItem(activePlayerIndex);
+
+            var sides = player.Roll(rnd);
+            foreach (var side in sides)
+            {
+                switch (side)
+                {
+                    case DiceSide.Dot:
+                        break;
+                    case DiceSide.Left:
+                        leftPlayer.NumberOfChips++;
+                        player.NumberOfChips--;
+                        break;
+                    case DiceSide.Right:
+                        rightPlayer.NumberOfChips++;
+                        player.NumberOfChips--;
+                        break;
+                    case DiceSide.Center:
+                        player.NumberOfChips--;
+                        break;
+                }
+            }
+
+            return false;
+        }
+
         public void Analyze()
         {
             var shortestLengthTurns = int.MaxValue;
