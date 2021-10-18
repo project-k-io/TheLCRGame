@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -125,31 +126,31 @@ namespace ProjectK.Games.LCR.ViewModels
         public SimulatorViewModel()
         {
             // Init 
-            PropertyChanged += OnPropertyChanged;
+            PropertyChanged += async (s,e) => await OnPropertyChanged(s,e);
 
             // Set Commands
-            PlayCommand = new RelayCommand(OnPlay);
+            PlayCommand = new RelayCommand(async () => await OnPlay());
             CancelCommand = new RelayCommand(OnCancel);
 
             // Update Settings
             SelectedPresetGameIndex = 0;
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async Task  OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
                 case nameof(SelectedPresetGameIndex):
                     OnPresetChanged();
-                    OnPlay();
+                    await OnPlay();
                     break;
                 case nameof(NumberOfPlayers):
                     CreatePlayers(NumberOfPlayers);
-                    OnPlay();
+                    await OnPlay();
                     break;
                 case nameof(NumberOfGames):
                     CreateGames(NumberOfGames);
-                    OnPlay();
+                    await OnPlay();
                     break;
             }
         }
@@ -190,6 +191,7 @@ namespace ProjectK.Games.LCR.ViewModels
             {
                 _players.Add(new PlayerViewModel { Index = i });
             }
+
         }
         private void ResetPlayers()
         {
@@ -199,6 +201,7 @@ namespace ProjectK.Games.LCR.ViewModels
                 player.Reset();
             }
         }
+
         private void ResetNumberOfWins()
         {
             // Logger.LogDebug("Reset players");
@@ -217,13 +220,14 @@ namespace ProjectK.Games.LCR.ViewModels
             }
         }
 
-        public void OnPlay()
+        public async Task OnPlay()
         {
-            Play();
+            await Play();
             Analyze();
             DrawCharts?.Invoke();
         }
-        public void Play()
+
+        public async Task Play()
         {
             Logger.LogDebug($"Game Started");
             Logger.LogDebug($"Players={NumberOfPlayers}, Games={NumberOfGames}");
@@ -239,7 +243,8 @@ namespace ProjectK.Games.LCR.ViewModels
                     foreach (var player in _players)
                     {
                         game.Turns++;
-                        if (Play(player, rnd))
+                        var finished = await Task.Run(() => Play(player, rnd));
+                        if (finished)
                         {
                             game.Winner = player.Index;
                             onlyOnePlayerHasChips = true;
@@ -333,7 +338,7 @@ namespace ProjectK.Games.LCR.ViewModels
                     winner = player;
                     continue;
                 }
-                
+
                 if (player.NumberOfWins > winner.NumberOfWins)
                 {
                     winner = player;
