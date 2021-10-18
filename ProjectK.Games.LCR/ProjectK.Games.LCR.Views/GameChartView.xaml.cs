@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,10 +18,10 @@ namespace ProjectK.Games.LCR.Views
         public GameChartView()
         {
             InitializeComponent();
-            Loaded += OnLoaded;
+            Loaded += async(s,e) => await OnLoaded(s, e);
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private async Task OnLoaded(object sender, RoutedEventArgs e)
         {
             if (DataContext is SimulatorViewModel model)
             {
@@ -28,7 +29,7 @@ namespace ProjectK.Games.LCR.Views
                 _simulator.Dispatcher = a => Dispatcher.BeginInvoke(a);
                 _simulator.DrawAxes += OnDrawAxes;
                 _simulator.DrawCharts += OnDrawCharts;
-                _simulator.OnPlay();
+                await _simulator.OnPlay();
             }
         }
 

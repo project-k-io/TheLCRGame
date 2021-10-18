@@ -151,15 +151,12 @@ namespace ProjectK.Games.LCR.ViewModels
             {
                 case nameof(SelectedPresetGameIndex):
                     OnPresetChanged();
-                    await OnPlay();
                     break;
                 case nameof(NumberOfPlayers):
                     CreatePlayers(NumberOfPlayers);
-                    await OnPlay();
                     break;
                 case nameof(NumberOfGames):
                     CreateGames(NumberOfGames);
-                    await OnPlay();
                     break;
             }
         }
@@ -246,6 +243,7 @@ namespace ProjectK.Games.LCR.ViewModels
             var rnd = _random;
             ResetGames();
             ResetNumberOfWins();
+            DrawCharts?.Invoke();
             foreach (var game in _games)
             {
                 ResetPlayers();
